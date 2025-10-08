@@ -51,8 +51,8 @@ SHOPIFY_API_VERSION=2024-10
 
 ## Próximos passos sugeridos
 
-- Criar páginas dinâmicas de produto (`app/produtos/[handle]/page.tsx`) usando `getProductByHandle`.
 - Implementar carrinho e checkout usando o Storefront Cart API + Shopify Checkout URL.
 - Conectar blog/artistas a um CMS (Notion, Sanity ou o Blog da Shopify).
 - Configurar analytics e pixels (Meta, TikTok, GA4) no layout.
+- Adicionar recomendações ou produtos relacionados na página de produto.
 - Implantar no Vercel ou infraestrutura equivalente (ajusta as envs no painel).

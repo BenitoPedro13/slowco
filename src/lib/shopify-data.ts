@@ -1,8 +1,10 @@
 import { sampleProducts } from "@/data/sample-products";
+import { sampleProductDetails } from "@/data/sample-product-details";
 import {
   envHasShopifyConfig,
   getFeaturedProducts,
   getCollectionProducts,
+  getProductByHandle,
 } from "./shopify";
 
 export async function getFeaturedProductsWithFallback() {
@@ -16,6 +18,31 @@ export async function getFeaturedProductsWithFallback() {
   } catch (error) {
     console.warn("Failed to load Shopify featured products", error);
     return { products: sampleProducts, isFallback: true };
+  }
+}
+
+export async function getProductWithFallback(handle: string) {
+  if (!envHasShopifyConfig()) {
+    return {
+      product: sampleProductDetails[handle] ?? null,
+      isFallback: true,
+    };
+  }
+
+  try {
+    const product = await getProductByHandle(handle);
+
+    if (!product) {
+      return { product: null, isFallback: false };
+    }
+
+    return { product, isFallback: false };
+  } catch (error) {
+    console.warn("Failed to load Shopify product", error);
+    return {
+      product: sampleProductDetails[handle] ?? null,
+      isFallback: true,
+    };
   }
 }
 

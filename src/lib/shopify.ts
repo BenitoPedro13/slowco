@@ -116,6 +116,51 @@ export type ShopifyProductCard = {
   } | null;
 };
 
+export type ShopifyProductOption = {
+  id: string;
+  name: string;
+  values: string[];
+};
+
+export type ShopifyProductVariant = {
+  id: string;
+  title: string;
+  availableForSale: boolean;
+  selectedOptions: { name: string; value: string }[];
+  price: ShopifyMoney;
+};
+
+export type ShopifyProductMediaImage = {
+  id: string;
+  image: {
+    url: string;
+    altText?: string | null;
+    width?: number | null;
+    height?: number | null;
+  };
+};
+
+export type ShopifyProduct = {
+  id: string;
+  handle: string;
+  title: string;
+  descriptionHtml: string;
+  availableForSale: boolean;
+  vendor?: string | null;
+  tags: string[];
+  options: ShopifyProductOption[];
+  priceRange: {
+    minVariantPrice: ShopifyMoney;
+    maxVariantPrice: ShopifyMoney;
+  };
+  media?: {
+    nodes: ShopifyProductMediaImage[];
+  };
+  variants: {
+    nodes: ShopifyProductVariant[];
+  };
+};
+
 export async function getFeaturedProducts(limit = 8) {
   const query = `
     query FeaturedProducts($limit: Int!) {
@@ -229,7 +274,7 @@ export async function getProductByHandle(handle: string) {
   `;
 
   const { data } = await shopifyFetch<{
-    product: unknown;
+    product: ShopifyProduct | null;
   }>({
     query,
     variables: { handle },
