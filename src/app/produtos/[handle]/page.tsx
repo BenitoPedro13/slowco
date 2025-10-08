@@ -11,11 +11,11 @@ import { addToCartAction } from "@/app/actions/cart";
 import { AddToCartSubmit } from "@/components/cart/add-to-cart-submit";
 
 type ProductPageProps = {
-  params: { handle: string };
+  params: Promise<{ handle: string }>;
 };
 
 export default async function ProductPage({ params }: ProductPageProps) {
-  const { handle } = params;
+  const { handle } = await params;
   const { product, isFallback, related } = await getProductWithFallback(handle);
 
   if (!product) {

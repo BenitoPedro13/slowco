@@ -35,25 +35,30 @@ export async function shopifyFetch<TData = unknown>(
 ): Promise<ShopifyFetchResponse<TData>> {
   ensureShopifyCredentials();
 
-  const { query, variables, cache = "force-cache", revalidate, mapData } = options;
+  const { query, variables, cache, revalidate, mapData } = options;
+
+  const requestInit: RequestInit & { next?: { revalidate?: number } } = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Shopify-Storefront-Access-Token": SHOPIFY_STOREFRONT_TOKEN!,
+    },
+    body: JSON.stringify({ query, variables }),
+  };
+
+  if (cache) {
+    requestInit.cache = cache;
+  }
+
+  if (revalidate === false) {
+    requestInit.cache = "no-store";
+  } else if (typeof revalidate === "number") {
+    requestInit.next = { revalidate };
+  }
 
   const result = await fetch(
     `https://${SHOPIFY_DOMAIN}/api/${SHOPIFY_API_VERSION}/graphql.json`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Shopify-Storefront-Access-Token": SHOPIFY_STOREFRONT_TOKEN!,
-      },
-      body: JSON.stringify({ query, variables }),
-      cache,
-      next:
-        typeof revalidate === "number"
-          ? { revalidate }
-          : revalidate === false
-            ? { revalidate: 0 }
-            : undefined,
-    },
+    requestInit,
   );
 
   if (!result.ok) {

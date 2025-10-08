@@ -175,12 +175,14 @@ function mapShopifyCart(cart: ShopifyCartResponse | null): Cart | null {
   };
 }
 
-function getCartCookie() {
-  return cookies().get(CART_COOKIE_NAME)?.value ?? null;
+async function getCartCookie() {
+  const store = await cookies();
+  return store.get(CART_COOKIE_NAME)?.value ?? null;
 }
 
-function setCartCookie(id: string) {
-  cookies().set(CART_COOKIE_NAME, id, {
+async function setCartCookie(id: string) {
+  const store = await cookies();
+  store.set(CART_COOKIE_NAME, id, {
     path: "/",
     maxAge: CART_COOKIE_MAX_AGE,
     httpOnly: true,
@@ -188,13 +190,15 @@ function setCartCookie(id: string) {
   });
 }
 
-function deleteCartCookie() {
-  cookies().delete(CART_COOKIE_NAME);
+async function deleteCartCookie() {
+  const store = await cookies();
+  store.delete(CART_COOKIE_NAME);
 }
 
-function getFallbackCartData(): { lines: { handle: string; quantity: number }[] } {
+async function getFallbackCartData(): Promise<{ lines: { handle: string; quantity: number }[] }> {
   try {
-    const value = cookies().get(FALLBACK_CART_COOKIE_NAME)?.value;
+    const store = await cookies();
+    const value = store.get(FALLBACK_CART_COOKIE_NAME)?.value;
     if (!value) {
       return { lines: [] };
     }
@@ -208,8 +212,9 @@ function getFallbackCartData(): { lines: { handle: string; quantity: number }[] 
   }
 }
 
-function setFallbackCartData(data: { lines: { handle: string; quantity: number }[] }) {
-  cookies().set(FALLBACK_CART_COOKIE_NAME, JSON.stringify(data), {
+async function setFallbackCartData(data: { lines: { handle: string; quantity: number }[] }) {
+  const store = await cookies();
+  store.set(FALLBACK_CART_COOKIE_NAME, JSON.stringify(data), {
     path: "/",
     maxAge: CART_COOKIE_MAX_AGE,
     httpOnly: true,
@@ -223,8 +228,30 @@ function findSampleByVariantId(variantId: string) {
   );
 }
 
-function buildFallbackCart(): Cart {
-  const fallback = getFallbackCartData();
+async function addLineToFallbackCart(handleHint: string | null, quantity: number) {
+  const current = await getFallbackCartData();
+  const handle =
+    handleHint ??
+    current.lines[0]?.handle ??
+    (sampleProducts.length ? sampleProducts[0].handle : null);
+
+  if (!handle) {
+    return buildFallbackCart();
+  }
+
+  const existing = current.lines.find((line) => line.handle === handle);
+  if (existing) {
+    existing.quantity += quantity;
+  } else {
+    current.lines.push({ handle, quantity });
+  }
+
+  await setFallbackCartData(current);
+  return await buildFallbackCart();
+}
+
+async function buildFallbackCart(): Promise<Cart> {
+  const fallback = await getFallbackCartData();
 
   const lines: CartLine[] = fallback.lines
     .map((line, index) => {
@@ -375,76 +402,66 @@ async function addRemoteLines(cartId: string, lines: { merchandiseId: string; qu
 
 export async function getCart(): Promise<CartResult> {
   if (!envHasShopifyConfig()) {
-    return { cart: buildFallbackCart(), isFallback: true };
+    return { cart: await buildFallbackCart(), isFallback: true };
   }
 
-  const cartId = getCartCookie();
+  const cartId = await getCartCookie();
   if (!cartId) {
     return { cart: null, isFallback: false };
   }
 
-  const cart = await fetchRemoteCart(cartId);
-  if (!cart) {
-    deleteCartCookie();
-    return { cart: null, isFallback: false };
-  }
+  try {
+    const cart = await fetchRemoteCart(cartId);
+    if (!cart) {
+      await deleteCartCookie();
+      return { cart: null, isFallback: false };
+    }
 
-  return { cart, isFallback: false };
+    return { cart, isFallback: false };
+  } catch (error) {
+    console.warn("Failed to load Shopify cart", error);
+    await deleteCartCookie();
+    return { cart: await buildFallbackCart(), isFallback: true };
+  }
 }
 
 export async function addToCart(variantId: string, quantity = 1): Promise<CartResult> {
   if (!envHasShopifyConfig()) {
-    const current = getFallbackCartData();
     const fallbackProduct = findSampleByVariantId(variantId);
-
-    if (!fallbackProduct) {
-      return { cart: buildFallbackCart(), isFallback: true };
-    }
-
-    const handle = fallbackProduct.handle;
-    const existing = current.lines.find((line) => line.handle === handle);
-    if (existing) {
-      existing.quantity += quantity;
-    } else {
-      current.lines.push({ handle, quantity });
-    }
-
-    setFallbackCartData(current);
-    return { cart: buildFallbackCart(), isFallback: true };
+    const cart = await addLineToFallbackCart(fallbackProduct?.handle ?? null, quantity);
+    return { cart, isFallback: true };
   }
 
-  const cartId = getCartCookie();
+  const cartId = await getCartCookie();
   const lines = [{ merchandiseId: variantId, quantity }];
 
   try {
     if (!cartId) {
       const cart = await createRemoteCart(lines);
       if (cart) {
-        setCartCookie(cart.id);
+        await setCartCookie(cart.id);
       }
       return { cart, isFallback: false };
     }
 
     const updatedCart = await addRemoteLines(cartId, lines);
     if (updatedCart) {
-      setCartCookie(updatedCart.id);
+      await setCartCookie(updatedCart.id);
       return { cart: updatedCart, isFallback: false };
     }
 
     // Fallback: cart might have expired, try to recreate
-    deleteCartCookie();
+    await deleteCartCookie();
     const cart = await createRemoteCart(lines);
     if (cart) {
-      setCartCookie(cart.id);
+      await setCartCookie(cart.id);
     }
     return { cart, isFallback: false };
-  } catch {
-    // If something fails, try once by creating a new cart
-    deleteCartCookie();
-    const cart = await createRemoteCart(lines);
-    if (cart) {
-      setCartCookie(cart.id);
-    }
-    return { cart, isFallback: false };
+  } catch (error) {
+    console.warn("Failed to update Shopify cart", error);
+    await deleteCartCookie();
+    const fallbackProduct = findSampleByVariantId(variantId);
+    const cart = await addLineToFallbackCart(fallbackProduct?.handle ?? null, quantity);
+    return { cart, isFallback: true };
   }
 }
