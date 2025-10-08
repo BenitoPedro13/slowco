@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Slow Company Storefront
 
-## Getting Started
+Next.js + AlignUI storefront preparado para integrar com a Shopify Storefront API. Já inclui páginas bases (home, catálogo, coleções, artistas, contato) com o visual escuro da marca e fallback de produtos para desenvolvimento offline.
 
-First, run the development server:
+## Stack
+
+- Next.js 15 App Router & React Server Components
+- Tailwind/AlignUI (componentes já prontos dentro de `src/components/ui`)
+- Shopify Storefront GraphQL API (via fetch server-side)
+
+## Como rodar localmente
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
+cp .env.example .env.local   # ajuste com as credenciais reais da Shopify
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+> Enquanto as variáveis de ambiente não estiverem configuradas, o site usa produtos de demonstração definidos em `src/data/sample-products.ts`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Configurando a Shopify
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Crie uma loja Shopify (pode ser trial) e habilite o canal Storefront API.
+2. Em *Settings → Apps and sales channels → Develop apps*, gere uma Storefront Access Token.
+3. Preencha as variáveis no `.env.local`:
 
-## Learn More
+```
+SHOPIFY_STORE_DOMAIN=seu-loja.myshopify.com
+SHOPIFY_STOREFRONT_ACCESS_TOKEN=token_gerado
+SHOPIFY_API_VERSION=2024-10
+```
 
-To learn more about Next.js, take a look at the following resources:
+4. Crie collections na Shopify com os handles:
+   - `produtos` (catálogo geral)
+   - `apparel`
+   - `merch`
+   - `new-drop`
+5. Publique os produtos nessas collections para que apareçam nas respectivas páginas do site.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+> Se preferir outros handles, atualize os arquivos em `src/app/*/page.tsx`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Estrutura de pastas principal
 
-## Deploy on Vercel
+- `src/app/` — rotas (home, contato, artistas, coleções)
+- `src/components/layout/` — header, footer e shell global
+- `src/components/sections/` — blocos de seção usados na home
+- `src/components/product/` — cards e grid de produtos
+- `src/lib/shopify.ts` — cliente GraphQL da Shopify
+- `src/lib/shopify-data.ts` — helpers com fallback para dados de exemplo
+- `src/data/sample-products.ts` — produtos mockados
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Próximos passos sugeridos
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Criar páginas dinâmicas de produto (`app/produtos/[handle]/page.tsx`) usando `getProductByHandle`.
+- Implementar carrinho e checkout usando o Storefront Cart API + Shopify Checkout URL.
+- Conectar blog/artistas a um CMS (Notion, Sanity ou o Blog da Shopify).
+- Configurar analytics e pixels (Meta, TikTok, GA4) no layout.
+- Implantar no Vercel ou infraestrutura equivalente (ajusta as envs no painel).
