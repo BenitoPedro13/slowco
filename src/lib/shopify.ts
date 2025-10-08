@@ -1,5 +1,3 @@
-"use server";
-
 type ShopifyFetchOptions<T> = {
   query: string;
   variables?: Record<string, unknown>;
