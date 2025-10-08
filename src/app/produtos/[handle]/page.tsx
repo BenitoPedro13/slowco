@@ -6,6 +6,7 @@ import { getProductWithFallback } from "@/lib/shopify-data";
 import { formatCurrency } from "@/lib/format";
 import * as Button from "@/components/ui/button";
 import { RiErrorWarningLine } from "@remixicon/react";
+import { ProductGrid } from "@/components/product/product-grid";
 
 type ProductPageProps = {
   params: { handle: string };
@@ -13,7 +14,7 @@ type ProductPageProps = {
 
 export default async function ProductPage({ params }: ProductPageProps) {
   const { handle } = params;
-  const { product, isFallback } = await getProductWithFallback(handle);
+  const { product, isFallback, related } = await getProductWithFallback(handle);
 
   if (!product) {
     notFound();
@@ -151,6 +152,21 @@ export default async function ProductPage({ params }: ProductPageProps) {
           ) : null}
         </div>
       </section>
+
+      {related.length ? (
+        <section className="mx-auto w-full max-w-6xl px-4 pb-20 sm:px-6 lg:px-8">
+          <div className="flex flex-col gap-3 pb-8 text-white">
+            <span className="text-xs font-semibold uppercase tracking-[0.3em] text-white/50">
+              Você também pode curtir
+            </span>
+            <h2 className="text-2xl font-semibold md:text-3xl">Produtos relacionados</h2>
+            <p className="max-w-2xl text-sm text-white/65 md:text-base">
+              Selecionamos drops que combinam com esta peça para você montar o fit completo.
+            </p>
+          </div>
+          <ProductGrid products={related.slice(0, 3)} />
+        </section>
+      ) : null}
     </SiteShell>
   );
 }

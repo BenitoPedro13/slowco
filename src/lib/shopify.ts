@@ -283,3 +283,23 @@ export async function getProductByHandle(handle: string) {
 
   return data.product;
 }
+
+export async function getProductRecommendations(productId: string) {
+  const query = `
+    query ProductRecommendations($productId: ID!) {
+      productRecommendations(productId: $productId) {
+        ${DEFAULT_PRODUCT_CARD_FIELDS}
+      }
+    }
+  `;
+
+  const { data } = await shopifyFetch<{
+    productRecommendations: ShopifyProductCard[];
+  }>({
+    query,
+    variables: { productId },
+    revalidate: 300,
+  });
+
+  return data.productRecommendations;
+}

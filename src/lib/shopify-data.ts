@@ -5,6 +5,7 @@ import {
   getFeaturedProducts,
   getCollectionProducts,
   getProductByHandle,
+  getProductRecommendations,
 } from "./shopify";
 
 export async function getFeaturedProductsWithFallback() {
@@ -26,6 +27,7 @@ export async function getProductWithFallback(handle: string) {
     return {
       product: sampleProductDetails[handle] ?? null,
       isFallback: true,
+      related: sampleProducts.filter((item) => item.handle !== handle).slice(0, 4),
     };
   }
 
@@ -33,15 +35,22 @@ export async function getProductWithFallback(handle: string) {
     const product = await getProductByHandle(handle);
 
     if (!product) {
-      return { product: null, isFallback: false };
+      return { product: null, isFallback: false, related: [] };
     }
 
-    return { product, isFallback: false };
+    const recommendations = await getProductRecommendations(product.id);
+
+    return {
+      product,
+      isFallback: false,
+      related: recommendations?.filter((item) => item.handle !== handle) ?? [],
+    };
   } catch (error) {
     console.warn("Failed to load Shopify product", error);
     return {
       product: sampleProductDetails[handle] ?? null,
       isFallback: true,
+      related: sampleProducts.filter((item) => item.handle !== handle).slice(0, 4),
     };
   }
 }

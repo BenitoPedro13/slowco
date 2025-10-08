@@ -54,5 +54,5 @@ SHOPIFY_API_VERSION=2024-10
 - Implementar carrinho e checkout usando o Storefront Cart API + Shopify Checkout URL.
 - Conectar blog/artistas a um CMS (Notion, Sanity ou o Blog da Shopify).
 - Configurar analytics e pixels (Meta, TikTok, GA4) no layout.
-- Adicionar recomendações ou produtos relacionados na página de produto.
+- Integrar recomendações Shopify com base em coleções ou tags específicas e permitir cross-sell no carrinho.
 - Implantar no Vercel ou infraestrutura equivalente (ajusta as envs no painel).
