@@ -7,6 +7,8 @@ import { formatCurrency } from "@/lib/format";
 import * as Button from "@/components/ui/button";
 import { RiErrorWarningLine } from "@remixicon/react";
 import { ProductGrid } from "@/components/product/product-grid";
+import { addToCartAction } from "@/app/actions/cart";
+import { AddToCartSubmit } from "@/components/cart/add-to-cart-submit";
 
 type ProductPageProps = {
   params: { handle: string };
@@ -26,6 +28,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
       .filter((image): image is NonNullable<typeof image> => Boolean(image?.url)) ?? [];
 
   const price = formatCurrency(product.priceRange.minVariantPrice);
+  const defaultVariant = product.variants.nodes[0];
+  const isAvailable = Boolean(defaultVariant?.availableForSale);
+  const relatedProducts = related ?? [];
 
   return (
     <SiteShell>
@@ -108,14 +113,17 @@ export default async function ProductPage({ params }: ProductPageProps) {
           ) : null}
 
           <div className="space-y-4">
-            <Button.Root
-              variant="primary"
-              mode="filled"
-              size="medium"
-              className="w-full bg-white text-black hover:bg-white/90"
-            >
-              Adicionar ao carrinho
-            </Button.Root>
+            <form action={addToCartAction} className="space-y-2">
+              <input type="hidden" name="variantId" value={defaultVariant?.id ?? ""} />
+              <input type="hidden" name="quantity" value="1" />
+              <AddToCartSubmit disabled={!isAvailable || !defaultVariant?.id} />
+            </form>
+
+            {!isAvailable ? (
+              <p className="text-xs text-white/60">
+                Produto indisponível no momento. Entre em contato para saber sobre novas unidades.
+              </p>
+            ) : null}
 
             <Button.Root
               asChild
@@ -153,7 +161,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
         </div>
       </section>
 
-      {related.length ? (
+      {relatedProducts.length ? (
         <section className="mx-auto w-full max-w-6xl px-4 pb-20 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-3 pb-8 text-white">
             <span className="text-xs font-semibold uppercase tracking-[0.3em] text-white/50">
@@ -164,7 +172,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               Selecionamos drops que combinam com esta peça para você montar o fit completo.
             </p>
           </div>
-          <ProductGrid products={related.slice(0, 3)} />
+          <ProductGrid products={relatedProducts.slice(0, 3)} />
         </section>
       ) : null}
     </SiteShell>

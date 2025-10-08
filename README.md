@@ -39,6 +39,13 @@ SHOPIFY_API_VERSION=2024-10
 
 > Se preferir outros handles, atualize os arquivos em `src/app/*/page.tsx`.
 
+## Carrinho & Checkout
+
+- O botão “Adicionar ao carrinho” usa as server actions em `src/app/actions/cart.ts` para criar/atualizar um carrinho via Storefront Cart API.
+- O identificador do carrinho fica em cookie (`slowco_shopify_cart_id`) por 30 dias; o checkout é aberto no link retornado pela Shopify.
+- Sem credenciais Shopify o fluxo entra em modo demonstrativo, persistindo itens via cookie e direcionando o CTA para a página de contato.
+- A página `app/carrinho/page.tsx` mostra linhas, subtotal e botão de checkout; execute novamente `pnpm dev` após configurar as variáveis para ver os dados reais.
+
 ## Estrutura de pastas principal
 
 - `src/app/` — rotas (home, contato, artistas, coleções)
@@ -51,7 +58,7 @@ SHOPIFY_API_VERSION=2024-10
 
 ## Próximos passos sugeridos
 
-- Implementar carrinho e checkout usando o Storefront Cart API + Shopify Checkout URL.
+- Permitir seleção real de variações (tamanho/cor) antes de adicionar ao carrinho.
 - Conectar blog/artistas a um CMS (Notion, Sanity ou o Blog da Shopify).
 - Configurar analytics e pixels (Meta, TikTok, GA4) no layout.
 - Integrar recomendações Shopify com base em coleções ou tags específicas e permitir cross-sell no carrinho.
