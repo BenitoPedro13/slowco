@@ -1,4 +1,4 @@
-import { SITE_URL } from "@/lib/config";
+import { SITE_URL, WHATSAPP_NUMBER } from "@/lib/config";
 import type { Metadata } from "next";
 import { Archivo, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -58,7 +58,7 @@ export default async function RootLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
-      <body className="antialiased">
+      <body className={`antialiased ${placeholder ? "has-sample-notice" : ""}`}>
         <a
           href="#conteudo"
           className="type-label sr-only z-40 bg-canvas px-3 py-2 focus:not-sr-only focus:fixed focus:top-2 focus:left-2"
@@ -66,11 +66,11 @@ export default async function RootLayout({
           {strings["G-PULAR"]}
         </a>
         <BagProvider index={index}>
-          <SiteHeader accent={accent} currentDropSlug={currentDrop?.slug ?? null} />
+          <SiteHeader whatsappNumber={WHATSAPP_NUMBER} accent={accent} currentDropSlug={currentDrop?.slug ?? null} />
           {placeholder ? (
-            <p role="note" className="type-label border-b border-content px-4 py-2 sm:px-6 lg:px-10">
-              <span className="sm:hidden">{strings["G-EXEMPLO-CURTO"]}</span>
-              <span className="hidden sm:inline">{strings["G-EXEMPLO"]}</span>
+            <p role="note" className="type-label flex items-center border-b border-content px-4 py-2 sm:px-6 lg:px-10">
+              <span className="xl:hidden">{strings["G-EXEMPLO-CURTO"]}</span>
+              <span className="hidden xl:inline">{strings["G-EXEMPLO"]}</span>
             </p>
           ) : null}
           {children}

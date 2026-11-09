@@ -231,3 +231,25 @@ No new imports; the source remains under §9's consent gate.
 | Date | IDs | Approved by | Note |
 | --- | --- | --- | --- |
 | — | — | — | nothing approved yet (`08` #16) |
+
+### B1 layout continuation (2026-11-09)
+
+No new public strings or claims. The existing `G-EXEMPLO-CURTO` notice appears below
+1280px; `G-EXEMPLO` appears from 1280px. Both remain persistent. Campaign photo and alt
+text remain the approved preview selection; desktop focal point lives beside mobile focal
+point in editorial data. Brand artwork, real catalogue data and launch consent gates remain open.
+
+### B7 strings (provisional interface copy, catalogue inputs still blocked)
+
+| ID | pt-BR text |
+| --- | --- |
+| P-GALERIA | Fotos da peça |
+| P-AMPLIAR | Ampliar foto {n} |
+| P-VER-FOTO | Ver foto {n} |
+| P-FOTO-ANTERIOR / P-FOTO-PROXIMA | ANTERIOR / PRÓXIMA |
+| P-DADOS-PENDENTES | A CONFIRMAR COM A SLOW |
+| P-DADOS-CAMPOS | PREÇO / MEDIDAS / TECIDO |
+| P-MESMO-DROP | DO MESMO DROP |
+
+B7 reuses B-QTD/B-MAIS/B-MENOS and both existing legal lines. Missing real product data
+remains blocked by 08 #7/#21; these labels do not supply product facts.

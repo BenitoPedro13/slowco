@@ -35,7 +35,7 @@ test("2. stored lines render; stepper, remove and counter stay in sync", async (
   ]);
   await page.goto("/sacola");
   await expect(bagLink(page)).toHaveAccessibleName("Sacola, 3 itens");
-  await expect(page.getByRole("heading", { level: 2 })).toHaveCount(2); // unknown slug hidden
+  await expect(page.locator("main ul").getByRole("heading", { level: 2 })).toHaveCount(2); // unknown slug hidden
 
   const first = page.getByRole("group", { name: /PEÇA DE EXEMPLO 03, Tamanho A/ });
   await first.getByRole("button", { name: "Aumentar quantidade" }).click();
@@ -125,7 +125,7 @@ for (const theme of ["preto", "branco", "drop"]) {
     await page.addInitScript((t) => localStorage.setItem("slow:tema", t), theme);
     await seedBag(page, [{ slug: P3, size: "A", quantity: 1 }]);
     await page.goto("/sacola");
-    await expect(page.getByRole("heading", { level: 2 })).toHaveCount(1);
+    await expect(page.locator("main ul").getByRole("heading", { level: 2 })).toHaveCount(1);
     const results = await new AxeBuilder({ page })
       .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"])
       .analyze();

@@ -15,7 +15,9 @@ import { NavLinks } from "./nav-links";
 export function SiteHeader({
   accent,
   currentDropSlug,
+  whatsappNumber,
 }: {
+  whatsappNumber: string | null;
   accent: DropAccent;
   currentDropSlug: string | null;
 }) {
@@ -40,7 +42,7 @@ export function SiteHeader({
           <div className="hidden sm:block">
             <ThemeSwitch accent={accent} />
           </div>
-          <BagCounter />
+          <BagCounter whatsappNumber={whatsappNumber} currentDropHref={currentDropSlug ? `/drops/${currentDropSlug}` : "/arquivo"} />
           <div className="sm:hidden">
             <MenuSheet items={items} accent={accent} />
           </div>

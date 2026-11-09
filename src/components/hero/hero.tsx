@@ -19,28 +19,31 @@ export function Hero({
 }: {
   drop: (DropStateInput & { name: string; href: string }) | null;
   /** Campaign photo filling the space above the wordmark, like a poster (design pass). */
-  photo: { src: string; alt: string; focal: { x: number; y: number } } | null;
+  photo: { src: string; alt: string; focal: { x: number; y: number }; desktopFocal?: { x: number; y: number } } | null;
 }) {
   return (
-    <section className="flex overflow-x-clip min-h-[max(504px,calc(100svh-3.5rem))] flex-col justify-between gap-6 px-4 lg:gap-8 py-4 sm:px-6 lg:min-h-[max(504px,calc(100svh-4rem))] lg:px-10 lg:py-6">
-      {drop ? <DropTicker {...drop} /> : <span />}
+    <section className="overflow-x-clip">
+      <div className="hero-poster">
+      <div className="hero-poster__ticker">{drop ? <DropTicker {...drop} /> : null}</div>
 
       {photo ? (
-        <div className="relative min-h-[240px] flex-1 lg:aspect-[16/9] lg:min-h-0 lg:flex-none">
+        <div className="hero-poster__photo" style={{
+          "--focal-mobile": `${photo.focal.x}% ${photo.focal.y}%`,
+          "--focal-desktop": `${(photo.desktopFocal ?? photo.focal).x}% ${(photo.desktopFocal ?? photo.focal).y}%`,
+        } as React.CSSProperties}>
           <Image
             src={photo.src}
             alt={photo.alt}
             fill
             priority
+            fetchPriority="high"
             sizes="100vw"
             className="object-cover"
-            style={{ objectPosition: `${photo.focal.x}% ${photo.focal.y}%` }}
           />
         </div>
       ) : null}
 
-      <div className="flex flex-col gap-6 lg:gap-8">
-        <div className="@container">
+      <div className="hero-poster__wordmark @container">
           <h1>
             <span
               aria-hidden="true"
@@ -59,7 +62,8 @@ export function Hero({
           </h1>
         </div>
 
-        <div className="relative z-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      </div>
+        <div className="flex flex-col gap-4 px-4 py-6 sm:flex-row sm:items-end sm:justify-between sm:px-6 lg:px-10">
           <div className="flex flex-col gap-4">
             {/* The garments' own woven-label lines (00 §A), set as a label. */}
             <div className="type-label inline-flex max-w-[44ch] flex-col gap-1 self-start border border-content bg-canvas px-3 py-2">
@@ -81,7 +85,6 @@ export function Hero({
             <span aria-hidden="true">&nbsp;↗</span>
           </a>
         </div>
-      </div>
     </section>
   );
 }

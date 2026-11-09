@@ -1,0 +1,14 @@
+.product-gallery { scrollbar-width: thin; }
+.product-sizes { scroll-margin-block: 8rem 14rem; }
+@media (max-width: 1023px) {
+  html:has(.product-page) { scroll-padding-bottom: 14rem; }
+  .product-actions {
+    position: fixed;
+    inset: auto 0 0;
+    z-index: 20;
+    border-top: 1px solid var(--content);
+    background: var(--canvas);
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  }
+  .product-actions > * { flex: 1; }
+}

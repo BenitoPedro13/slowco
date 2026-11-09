@@ -5,6 +5,7 @@ export const HOME_BAND = {
   src: "/catalogo/slow-2025-08-21-04.jpg",
   alt: "Camiseta branca vista de costas com 2025/SLOW APPAREL COMPANY em azul, modelo segurando uma bola.",
   focal: { x: 50, y: 27 },
+  desktopFocal: { x: 50, y: 22 },
   width: 1080,
   height: 1440,
 };

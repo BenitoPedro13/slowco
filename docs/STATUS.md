@@ -119,7 +119,7 @@ Never rebuild `.next` under `next start`; stop/restart to avoid stale manifests/
 
 1. Read `CLAUDE.md`, `09`, this current STATUS and `10`; current STATUS supersedes older claims
    that A1/OG remain unverified. Task records: A1 mobile menu, A3 hero photo and B17 OG images.
-2. Continue `10` §D: B1 full-viewport poster hero → B7 product → B6 archive → B8 bag drawer;
+2. Continue `10` §D: finish B1 performance acceptance, then B7 product → B6 archive → B8 bag drawer;
    then B11/B15/B20, B2 cinematic chapters and the remaining backlog in order.
 3. Direction is animated/cinematic. Do not invent client facts; preserve the example-data labels
    and gates. Data-dependent blocks remain hidden until inputs arrive; no fabricated dates,
@@ -130,3 +130,41 @@ Never rebuild `.next` under `next start`; stop/restart to avoid stale manifests/
 
 - **Handoff:** `docs/09-HANDOFF-NEXT.md` (older state; use this update where it differs).
 - **Backlog:** `docs/10-IDEAS-AND-UX-REVIEW.md` (detailed specs and ordered improvements).
+
+## 2026-11-09 — B1 poster continuation
+
+Implemented in `tasks/TASK-B1-poster-hero.md`: viewport campaign poster with overlaid
+woven drop ticker and SLOW wordmark, per-breakpoint focal points, one 1.2s photo settle
+and still reduced-motion composition. Supporting legal copy remains below. Solid paper
+text over a bounded black scrim provides a worst-case contrast of approximately 11.6:1.
+The existing example notice uses its concise version below 1280px, remains persistent,
+and keeps the current catalogue/consent/content blockers intact. No new dependencies.
+
+Actual validation:
+
+```text
+pnpm test:e2e --workers=4
+76 passed, 2 failed (35.2s)
+# All 73 existing tests passed. Two new desktop geometry checks exposed the 13px label override.
+# Corrected the poster calculation for the actual 33.9px desktop notice.
+pnpm test:e2e e2e/poster.spec.ts --workers=4
+5 passed (11.5s)
+# Fresh successful production build; final geometry and reduced-motion checks passed.
+pnpm test
+Tests 27 passed (27)
+pnpm typecheck
+# exit 0
+pnpm lint
+# 0 errors, 1 pre-existing unused-url warning in scripts/instagram/console.js
+```
+
+Viewed campaign screenshots at 390/768/1440/1920 in Chromium with reduced motion;
+files/logs under `/tmp/slowco-b1/` (temporary). Screenshots were recaptured after the desktop height correction and reviewed. Existing axe checks passed in all themes in the full run.
+Local throttled mobile sample (150ms RTT, 200000 B/s down, CPU ×4): LCP 3240 → 2640ms;
+uncompressed script bodies unchanged, 677.31 KiB. **B1's <2.5s LCP target remains unmet**;
+these single samples are not field measurements or Lighthouse scores. No cross-browser or
+physical-phone validation. Production servers stopped before every build; no staging,
+commits, push or deployment. B7 and the subsequent creative backlog remain unimplemented.
+
+The final campaign image explicitly requests high fetch priority; the 3192ms interim
+sample became 2640ms after this change. The 2.5s target remains open.

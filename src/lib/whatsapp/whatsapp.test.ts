@@ -42,6 +42,14 @@ describe("formatOrderMessage", () => {
     );
   });
 
+  it("preserves the exact order preview through URL encoding, including percent signs", () => {
+    const message = formatOrderMessage({
+      lines: [line, { ...line, size: "C", quantity: 99 }],
+      name: "João & Ana 100%",
+    });
+    expect(new URL(buildWhatsAppUrl("15555550100", message)).searchParams.get("text")).toBe(message);
+  });
+
   it("uses the single-piece opening, the optional price and a trimmed name", () => {
     const msg = formatOrderMessage({
       lines: [{ ...line, quantity: 1, price: "R$ 10,00" }],

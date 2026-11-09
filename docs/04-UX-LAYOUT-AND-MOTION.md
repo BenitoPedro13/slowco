@@ -236,3 +236,27 @@ explains the environment variable and restart. This configuration hint is absent
 - Mobile header/menu checked with touch emulation at 320/390px; see A1 verification.
 - Whether `/arquivo` shows sold-out pieces (archive as memory) or only buyable ones: proposal is
   both, sold-out pieces struck through **and** labelled, at full text contrast (`08` #14).
+
+## B1 — Viewport campaign poster (2026-11-09)
+
+Home now composes the campaign photo, inset woven drop ticker and bottom SLOW stand-in
+inside one viewport minus the header and persistent example notice. At short heights/high
+zoom a 440px minimum permits normal vertical scrolling. Supporting legal lines and Instagram
+remain immediately below. Mobile and desktop photo focal points are editorial data.
+The photo settles from 1.08 to 1 over 1.2s once, delayed behind the existing first-visit
+loader; reduced motion keeps it still. Existing wordmark entry/scroll motion remains.
+Solid paper wordmark sits above an 80–90% black scrim covering its full line box; even a
+white photo under 80% black gives approximately 11.6:1 contrast. No blend-mode dependency.
+The concise example notice is used below 1280px to preserve one-line geometry.
+Performance acceptance is still open: the local throttled sample exceeded 2.5s (STATUS).
+
+## B7 — Product editorial layout
+
+Product pages have a native horizontal snap gallery with numbered 44px photo selectors,
+current counter and an installed Radix Dialog lightbox. Arrow keys cycle images, Escape
+closes, focus returns to the opening photograph; pinch/browser zoom is not intercepted.
+The desktop info column remains sticky; mobile actions are fixed with safe-area padding,
+reserved page space and scroll margins for sizes. Quantity 1–99 affects both bag and
+single-product WhatsApp orders. Example products show the explicit unconfirmed-data block;
+no measurements, fabric or prices are invented. Legal garment lines and a same-drop snap
+rail complete the page. No new dependencies. Reduced motion disables programmatic smooth scroll.

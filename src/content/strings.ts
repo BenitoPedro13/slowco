@@ -107,6 +107,26 @@ export const strings = {
   "G-EXEMPLO":
     "DADOS DE EXEMPLO: drops, peças, tamanhos e datas deste site são fictícios até o catálogo da Slow Company chegar.",
 
+  "B-PREVIA": "MENSAGEM QUE SERÁ ABERTA NO WHATSAPP",
+  "B-VER-SACOLA": "VER SACOLA",
+
+  // Archive posters (B6).
+  "A-DISPONIVEL": "DISPONÍVEL",
+  "A-TODOS": "TODOS",
+  "A-FILTRAR": "Filtrar drops",
+  "A-CONTAGEM": "{n} peças ainda disponíveis",
+  "A-SEM-RESULTADOS": "Nenhum drop neste filtro.",
+
+  // Product editorial layout (B7); catalogue facts remain blocked.
+  "P-GALERIA": "Fotos da peça",
+  "P-AMPLIAR": "Ampliar foto {n}",
+  "P-VER-FOTO": "Ver foto {n}",
+  "P-FOTO-ANTERIOR": "ANTERIOR",
+  "P-FOTO-PROXIMA": "PRÓXIMA",
+  "P-DADOS-PENDENTES": "A CONFIRMAR COM A SLOW",
+  "P-DADOS-CAMPOS": "PREÇO / MEDIDAS / TECIDO",
+  "P-MESMO-DROP": "DO MESMO DROP",
+
   // Design moments (docs/tasks/TASK-M*.md)
   "M-PULAR-ENTRADA": "PULAR",
   "M-PAUSAR-GLOBO": "PAUSAR GLOBO",

@@ -5,6 +5,7 @@
 // read out ("A, esgotado") but can never become the selection.
 
 import { useState } from "react";
+import { MAX_QUANTITY } from "@/lib/bag/store";
 import { fill } from "@/content/fill";
 import { strings } from "@/content/strings";
 import { OrdersUnavailable } from "@/components/whatsapp/orders-unavailable";
@@ -43,6 +44,7 @@ export function ProductPurchase({
   const now = useNow(renderedAt);
   const { add } = useBagActions();
   const [size, setSize] = useState<string | null>(null);
+  const [quantity, setQuantity] = useState(1);
   const [error, setError] = useState(false);
 
   const buyable = isPurchasable(product, { releaseAt }, now);
@@ -81,7 +83,7 @@ export function ProductPurchase({
 
   const onAdd = () => {
     const s = requireSize();
-    if (s) add(product.slug, s);
+    if (s) add(product.slug, s, quantity);
   };
 
   const onOrderOne = () => {
@@ -90,7 +92,7 @@ export function ProductPurchase({
     const message = formatOrderMessage({
       single: true,
       lines: [
-        { product: product.name, drop: product.dropName, size: s, quantity: 1, price: product.price },
+        { product: product.name, drop: product.dropName, size: s, quantity, price: product.price },
       ],
     });
     // New tab, like every link that leaves the site (Instagram, WhatsApp); the shop stays open.
@@ -99,7 +101,7 @@ export function ProductPurchase({
 
   return (
     <div className="flex flex-col gap-6 border-t border-content pt-6">
-      <fieldset aria-describedby={error ? "erro-tamanho" : undefined}>
+      <fieldset className="product-sizes" aria-describedby={error ? "erro-tamanho" : undefined}>
         <legend className="type-label mb-3">{strings["P-TAMANHO"]}</legend>
         <div className="flex flex-wrap gap-2">
           {product.sizes.map((s) => {
@@ -144,7 +146,13 @@ export function ProductPurchase({
         ) : null}
       </fieldset>
 
-      <div className="flex flex-col gap-3 sm:flex-row">
+      <fieldset className="flex items-center gap-3">
+        <legend className="type-label mb-3">{strings["B-QTD"]}</legend>
+        <button type="button" className="size-11 border border-content disabled:opacity-50" aria-label={strings["B-MENOS"]} disabled={quantity <= 1} onClick={() => setQuantity(quantity - 1)}>−</button>
+        <output className="type-label w-6 text-center" aria-label={strings["B-QTD"]}>{quantity}</output>
+        <button type="button" className="size-11 border border-content disabled:opacity-50" aria-label={strings["B-MAIS"]} disabled={quantity >= MAX_QUANTITY} onClick={() => setQuantity(quantity + 1)}>+</button>
+      </fieldset>
+      <div data-testid="product-actions" className="product-actions flex flex-col gap-3 sm:flex-row">
         <button type="button" className={primary} onClick={onAdd}>
           {strings["P-ADICIONAR"]}
         </button>

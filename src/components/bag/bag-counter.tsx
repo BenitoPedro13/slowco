@@ -4,7 +4,7 @@
 // the link's accessible name (visually hidden text, not aria-label, so the visible "SACOLA" is
 // never contradicted, 2.5.3) carries the true count.
 
-import Link from "next/link";
+import { BagDrawer } from "./bag-drawer";
 import { bagLabel, useBagCount } from "@/hooks/use-bag";
 import { strings } from "@/content/strings";
 
@@ -27,16 +27,11 @@ function Digit({ value }: { value: number }) {
   );
 }
 
-export function BagCounter() {
+export function BagCounter({ whatsappNumber, currentDropHref }: { whatsappNumber: string | null; currentDropHref: string }) {
   const count = useBagCount();
   const shown = Math.min(count, 99);
   return (
-    <Link
-      href="/sacola"
-      data-count={count}
-      className="type-label inline-flex min-h-11 items-center gap-2 px-1 underline-offset-4 hover:underline aria-[current=page]:underline"
-    >
-      <span className="sr-only">{bagLabel(count)}</span>
+    <BagDrawer count={count} label={bagLabel(count)} whatsappNumber={whatsappNumber} currentDropHref={currentDropHref}>
       <span aria-hidden="true">
         {strings["G-SACOLA"]}
       </span>
@@ -44,6 +39,6 @@ export function BagCounter() {
         <Digit value={Math.floor(shown / 10)} />
         <Digit value={shown % 10} />
       </span>
-    </Link>
+    </BagDrawer>
   );
 }

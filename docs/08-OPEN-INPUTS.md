@@ -30,3 +30,7 @@ needs one stops until it arrives. Source sections are in `docs/00-DISCOVERY.md`.
 | 23 | **Globe stand-in**: the home globe is a generic procedural wireframe sphere drawn by our own code (`src/hooks/use-globe.ts`, `data-standin="globo"`), not the client's globe artwork. Replace with the client's own globe (file or approved redraw) or remove | home, brand | client | `docs/tasks/TASK-M4-globe.md` | open: stand-in in use (default assumed by Claude, not yet confirmed by Benito) |
 | 24 | **Sound**: deferred. No sound file from the client. If wanted: off by default, explicit button, never autoplay | home | client | `docs/tasks/TASK-M5-sound.md` | open: deferred |
 | 25 | **External links in a new tab** (Instagram, WhatsApp; the "PEDIR SÓ ESTA PEÇA" order too), announced to screen readers as "(abre em nova aba)". Internal links stay in the same tab | UX | Benito | `05` G-NOVA-ABA | open: default assumed by Claude, not yet confirmed by Benito |
+
+B7/B6 continuation: product measurements/fabric/prices and approved per-drop campaign
+covers remain missing. The preview uses existing photos as provisional covers and labels
+unconfirmed product fields explicitly. No content gate has been removed.

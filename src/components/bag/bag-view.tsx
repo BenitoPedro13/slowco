@@ -25,7 +25,11 @@ export const primaryAction =
 export function BagView({
   whatsappNumber,
   currentDropHref,
+  compact = false,
+  onNavigate,
 }: {
+  compact?: boolean;
+  onNavigate?: () => void;
   whatsappNumber: string | null;
   currentDropHref: string;
 }) {
@@ -37,7 +41,7 @@ export function BagView({
     return (
       <div className="mt-10 flex flex-col items-start gap-6">
         <p className="text-lg">{strings["B-VAZIA"]}</p>
-        <Link href={currentDropHref} className={primaryAction}>
+        <Link onClick={onNavigate} href={currentDropHref} className={primaryAction}>
           {strings["B-VER-DROP"]}
         </Link>
       </div>
@@ -56,8 +60,8 @@ export function BagView({
   });
 
   return (
-    <div className="mt-10 grid gap-10 lg:grid-cols-12">
-      <ul className="flex flex-col border-t border-content lg:col-span-7">
+    <div className={`mt-8 grid gap-8 ${compact ? "" : "lg:grid-cols-12"}`}>
+      <ul className={`flex flex-col border-t border-content ${compact ? "" : "lg:col-span-7"}`}>
         {lines.map((l) => (
           <li
             key={`${l.slug}:${l.size}`}
@@ -76,7 +80,7 @@ export function BagView({
             ) : null}
             <div className="flex flex-col gap-1">
               <h2 className="text-xl font-bold">
-                <Link href={`/produtos/${l.slug}`} className="underline-offset-4 hover:underline">
+                <Link onClick={onNavigate} href={`/produtos/${l.slug}`} className="underline-offset-4 hover:underline">
                   {l.name}
                 </Link>
               </h2>
@@ -126,7 +130,7 @@ export function BagView({
         ))}
       </ul>
 
-      <div className="flex flex-col gap-6 lg:col-span-5">
+      <div className={`min-w-0 flex flex-col gap-6 ${compact ? "" : "lg:col-span-5"}`}>
         <label className="flex flex-col gap-2">
           <span className="type-label">{strings["B-NOME"]}</span>
           <input
@@ -139,6 +143,10 @@ export function BagView({
             className="min-h-11 border border-content bg-canvas px-3 text-content"
           />
         </label>
+        <div className="min-w-0 border border-content p-4">
+          <h2 className="type-label mb-4">{strings["B-PREVIA"]}</h2>
+          <pre data-testid="message-preview" className="font-label text-sm leading-relaxed whitespace-pre-wrap break-words [overflow-wrap:anywhere]">{message}</pre>
+        </div>
         <p className="max-w-[68ch]">{strings["B-NOTA"]}</p>
         {whatsappNumber ? (
           <a
