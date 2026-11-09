@@ -119,7 +119,7 @@ Never rebuild `.next` under `next start`; stop/restart to avoid stale manifests/
 
 1. Read `CLAUDE.md`, `09`, this current STATUS and `10`; current STATUS supersedes older claims
    that A1/OG remain unverified. Task records: A1 mobile menu, A3 hero photo and B17 OG images.
-2. Continue `10` §D: finish B1 performance acceptance, then B7 product → B6 archive → B8 bag drawer;
+2. B7/B6/B8 are implemented (latest checkpoint below). Continue performance follow-up, then B11/B15/B20;
    then B11/B15/B20, B2 cinematic chapters and the remaining backlog in order.
 3. Direction is animated/cinematic. Do not invent client facts; preserve the example-data labels
    and gates. Data-dependent blocks remain hidden until inputs arrive; no fabricated dates,
@@ -168,3 +168,56 @@ commits, push or deployment. B7 and the subsequent creative backlog remain unimp
 
 The final campaign image explicitly requests high fetch priority; the 3192ms interim
 sample became 2640ms after this change. The 2.5s target remains open.
+
+## 2026-11-09 — B7, B6, B8 and reported sticky overlap
+
+Implemented and uncommitted:
+- B7: native snap gallery, counter/selectors, Radix lightbox with arrows/Escape/focus return,
+  quantity 1–99 for bag/direct WhatsApp, sticky mobile actions, honest missing-data block,
+  legal label and same-drop rail. Initial product tests: 15 passed.
+- User screenshot exposed sticky information overlapping related cards when scrolled.
+  Added TASK-B7-sticky-boundary and 6 regressions (all failed before the correction).
+  Main gallery/info now has its own containing grid; related rail is outside it. Reviewed
+  the matching scrolled position in all three themes at 2048px; all 6 regressions passed.
+- B6: archive poster wall, provisional existing-photo covers, real derived state/count,
+  native URL filters, optimistic selection, 240ms FLIP, still reduced-motion state.
+- B8: header drawer, shared BagView, name/quantity/remove, exact message preview and
+  full-page link. Missing WhatsApp configuration still gates sending.
+
+Final executed validation:
+```text
+pnpm test:e2e --workers=4
+# Fresh successful production build; initial full run exposed test assumptions about
+# added preview headings and the changing bag accessible name, corrected in tests.
+PW_REUSE=1 pnpm test:e2e --workers=4
+97 passed (36.5s)
+# Reused the same current production build after test-only corrections.
+pnpm test
+Test Files 4 passed (4)
+Tests 28 passed (28)
+pnpm typecheck
+# exit 0
+pnpm lint
+# 0 errors, 1 pre-existing unused-url warning in scripts/instagram/console.js:257
+git diff --check
+# no output
+```
+
+Screenshots/logs in /tmp/slowco-b7/, /tmp/slowco-b6/, /tmp/slowco-review/.
+Reviewed product at 320/390/768/1440, mobile lightbox, scrolled sticky boundary at 2048
+in three themes, archive posters and drawer. Browser checks remain Chromium emulation.
+Matching local throttled product samples: LCP 2160 → 1952ms, JS 696.61 → 701.83 KiB
+before/after B7. Final combined build: product 1984ms / 659.53 KiB, archive 3796ms /
+655.25 KiB, home 2996ms / 651.38 KiB. Uncompressed script bodies; single local samples
+(150ms latency, 200000 B/s download, CPU ×4), not Lighthouse or field percentiles.
+No pre-change archive sample. **Home B1 <2.5s target remains open; archive performance
+also needs follow-up.** Do not claim performance acceptance or cross-browser coverage.
+
+Next: performance follow-up, then B11/B15/B20, B2 cinematic chapters; data-dependent
+ideas stay gated. B7/B6/B8 are now implemented and supersede their older pending notes.
+No staging, commits, push or deployment. Stop any owned production server before rebuilding.
+
+Final browser closeout: filled drawer fits horizontally at 320/390/1440px, with bounds
+0–900px in the 900px viewport. Reviewed the 320px viewport capture and scrolled white-theme
+product capture. Owned production server on 3100 stopped; no build was changed underneath it.
+Contrast: all 36 pairs pass. Image metadata: 16 images checked, 0 with metadata.

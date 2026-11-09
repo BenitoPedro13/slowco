@@ -12,3 +12,8 @@ and asserts that sticky information ends before the related section, in all them
 wide desktop sizes. Confirm the regression fails before fixing code. Inspect the scrolled
 screenshots and rerun product/related/full checks with the current drawer/archive changes.
 No new copy, assets, dependencies, staging, commits or deployment.
+
+## Results
+All 6 new scrolled regressions failed before the boundary fix and passed after it.
+Viewed scrolled captures matching the user's 2048px report in all three themes.
+Final complete e2e suite: 97 passed (36.5s). No overlay remains in these tested cases.

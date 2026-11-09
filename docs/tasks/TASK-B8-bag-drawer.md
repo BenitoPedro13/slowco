@@ -14,3 +14,14 @@ Fail drawer regression before code. Compare preview to decoded link text (browse
 and unit check against the shared builder), name/quantity/remove updates, focus trap and return,
 mobile reduced motion, axe, full suite/typecheck/lint/unit/build, screenshots. Preserve all
 existing changes. No commits, staging, push or deploy.
+
+## Results
+Both drawer tests failed before implementation. Final full suite: 97 passed (36.5s),
+including preview/decoded URL equality, live name and quantity, focus trap/return, full-page
+navigation and mobile reduced-motion empty state. Existing bag tests now scope product
+headings to the product list because preview has its own heading. Unit URL round-trip
+covers an order with multiple lines, 99 units, Unicode and literal percent signs.
+Unit suite: 28 passed. Typecheck exit 0; lint only the pre-existing collector warning.
+Screenshots: /tmp/slowco-review/. Final home throttled sample: LCP 2996ms, script bodies
+651.38 KiB; product 1984ms / 659.53 KiB. Samples are diagnostic, not field percentiles.
+No new dependency, commit, staging, push or deployment.

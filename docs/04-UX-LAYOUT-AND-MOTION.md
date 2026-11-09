@@ -260,3 +260,24 @@ reserved page space and scroll margins for sizes. Quantity 1–99 affects both b
 single-product WhatsApp orders. Example products show the explicit unconfirmed-data block;
 no measurements, fabric or prices are invented. Legal garment lines and a same-drop snap
 rail complete the page. No new dependencies. Reduced motion disables programmatic smooth scroll.
+
+B7 correction after user review: gallery and sticky information now share a dedicated
+containing grid. The related section follows outside it; the sticky column cannot cross
+into related cards. Scrolled regression covers three themes at 1440 and 2048px.
+
+## B6 — Archive posters
+
+The archive is a newest-first poster grid using provisional covers from existing public
+photos. State/year/name/count text sits on solid canvas panels. Sold-out image opacity
+never affects text. Native radio filters use ?estado=disponivel|esgotado, with unknown
+values defaulting to all. Optimistic radio/grid updates accompany Next navigation;
+back/reload reflect the URL. Surviving cards use 240ms measured FLIP transforms; reduced
+motion is instant. Hover/focus reveals the existing editorial duotone treatment.
+
+## B8 — Bag drawer
+
+Header bag anchor opens an installed Radix dialog drawer; /sacola remains the full page
+and anchor fallback. Drawer and full page share BagView and the exact formatOrderMessage
+output shown in the preview and encoded WhatsApp URL. Name/quantity/removal update both.
+Internal links close the drawer; Escape restores trigger focus. Entry is 250ms, instant
+under reduced motion. Missing-number send gates remain. No new dependencies or storage.

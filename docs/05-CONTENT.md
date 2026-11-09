@@ -253,3 +253,18 @@ point in editorial data. Brand artwork, real catalogue data and launch consent g
 
 B7 reuses B-QTD/B-MAIS/B-MENOS and both existing legal lines. Missing real product data
 remains blocked by 08 #7/#21; these labels do not supply product facts.
+
+### B6/B8 interface strings (provisional)
+
+| ID | pt-BR text |
+| --- | --- |
+| A-TODOS / A-DISPONIVEL | TODOS / DISPONÍVEL |
+| A-FILTRAR | Filtrar drops |
+| A-CONTAGEM | {n} peças ainda disponíveis |
+| A-SEM-RESULTADOS | Nenhum drop neste filtro. |
+| B-PREVIA | MENSAGEM QUE SERÁ ABERTA NO WHATSAPP |
+| B-VER-SACOLA | VER SACOLA |
+
+Available-piece counts count purchasable catalogue products, never stock quantities.
+Placeholder names/dates remain explicitly examples. WhatsApp preview uses the existing
+approved-for-preview template unchanged; client approval remains a launch requirement.
