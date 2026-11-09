@@ -27,6 +27,7 @@
 | 2026-11-09 | Voice: `sacola`, no emoji, `BEM-VINDO`, `raízes` | **default assumed by Claude, not yet confirmed by Benito** | 01 §5–6, 08 #20 (open) |
 | 2026-11-09 | Client photos from @slow_tm used in the preview, paired with placeholder products | Benito (client agreed, per Benito) | 05 §9, 08 #9 |
 | 2026-11-09 | Until the client sends products, the static catalogue holds **placeholder records** (`placeholder: true`), shown with a visible `DADOS DE EXEMPLO` notice, no prices, sizes labelled `A/B/C`, dates relative to the build | **default assumed by Claude, not yet confirmed by Benito** | 05 §0, 06 §3, 08 #22 (open) |
+| 2026-11-09 | **Direction A: animated / cinematic** (Benito: "animada"); motion cap of 2-3 moments per screen proposed, unconfirmed | Benito | 09 §4, §5.4 |
 
 ## Done
 
@@ -53,8 +54,79 @@
   horizontal overflow from the wordmark breakup clipped. JS on `/`: 245.2 KiB → 320.5 KiB uncompressed (11 files).
   Checks: `pnpm test:e2e` **49 passed**, `pnpm test` **27 passed**, `pnpm lint` 0 errors (1 warning in scripts/instagram/console.js), typecheck ok.
 
+## 2026-11-09 — A1/A2/A3/A4 + B17 continuation
+
+Implemented and uncommitted (preserve all existing working-tree changes):
+
+- Mobile header now visibly says SLOW / SACOLA + counter / MENU. The earlier bag label was
+  still hidden at small widths. Shortened the sample notice to one line at 320px, keeping 12px
+  text. Labelled theme radios remain inside the Radix menu.
+- Exact mobile reproduction initially opened the menu. A later failure was traced to JS chunk
+  HTTP 500s after `.next` changed under an old production server. Restarting against the current
+  build restored hydration; no overlay/cursor input interception was reproduced. Touch e2e now
+  covers open/theme/wipe/focus/Escape/close/reload/navigation, reduced motion and first-visit intro.
+- A3 selects the existing white 2025/SLOW APPAREL COMPANY back-print photo, with focal point
+  50%/27%. Viewed screenshots at 320/390/1280/1440/1920/2560. The 16:9 desktop photo can extend
+  below the initial viewport at wide sizes: B1's viewport poster is **still pending**.
+- Confirmed quantity 99 with disabled increase button in the browser. Missing-number product
+  and filled-bag states now have a development-only WhatsApp configuration hint. Verified on
+  the existing dev server at localhost:3000 (3300 could not start because that dev server exists).
+- B17: OG routes for home/archive/contact/bag/every drop/every product; 404 inherits home.
+  PNGs 1200×630, Twitter large-image metadata, visible sample-data notice, readable paper/ink
+  text. Unknown product/drop image routes now return 404 (regression was 200 before correction).
+  `NEXT_PUBLIC_SITE_URL` must be the actual origin before deployment; domain still open.
+- User-reported duplicate loader key fixed by deduplicating input photos before selecting five.
+- User-reported hidden-document InvalidStateError reproduced with a deterministic browser-API
+  rejection. Installed React's exact message matching misses Chromium's new suffix (upstream
+  react/react#37669). Removed the document snapshot wrapper; `usePageReveal` keeps the 280ms
+  content reveal, skips hidden/reduced-motion/first load and cancels on hide/preference change.
+  No global error suppression or dependency upgrade. Both regression tests failed before fixes.
+
+Executed validation (actual output, final code):
+
+```text
+pnpm test:e2e --workers=4
+73 passed (37.8s)
+# Playwright performed a fresh successful production build first.
+pnpm test
+Test Files  4 passed (4)
+Tests  27 passed (27)
+pnpm typecheck
+$ tsc --noEmit
+# exit 0
+pnpm lint
+1 problem (0 errors, 1 warning)
+# pre-existing unused url in scripts/instagram/console.js:257
+pnpm check:contrast
+all 36 pairs pass
+pnpm check:images
+checked 16 image(s) under public: 0 with metadata
+git diff --check
+# no output
+```
+
+Browser checks were Chromium emulation, not physical phones/Firefox/WebKit. Axe checks passed
+in the existing suite and mobile menu tests. No Lighthouse/throttled LCP run. Local unthrottled
+390px LCP before/after photo change: 64ms/224ms; home script bodies 690.92/691.20 KiB over 13
+script URLs. These were captured **before** the final snapshot-to-content-reveal correction,
+so do not treat them as final performance numbers or compare them to historical chunk counts.
+Screenshots and logs from this session are in `/tmp/slowco-a1/` (temporary, not committed).
+The OG missing-file fallback was not separately exercised; normal routes and unknown slugs were.
+Production test servers were stopped; the pre-existing dev server on port 3000 was left alone.
+Never rebuild `.next` under `next start`; stop/restart to avoid stale manifests/chunk failures.
+
 ## Next
 
-1. Benito: review T1 in a browser (`pnpm dev`), commit when happy.
-2. Benito: answer `08` #18, #19; send `08` #3 notes; pass `08` #2, #4–#9, #14–#17, #20–#21 to the client.
-3. T2 stack bump, then T3 core (`07`).
+1. Read `CLAUDE.md`, `09`, this current STATUS and `10`; current STATUS supersedes older claims
+   that A1/OG remain unverified. Task records: A1 mobile menu, A3 hero photo and B17 OG images.
+2. Continue `10` §D: B1 full-viewport poster hero → B7 product → B6 archive → B8 bag drawer;
+   then B11/B15/B20, B2 cinematic chapters and the remaining backlog in order.
+3. Direction is animated/cinematic. Do not invent client facts; preserve the example-data labels
+   and gates. Data-dependent blocks remain hidden until inputs arrive; no fabricated dates,
+   stock, event venues, VIP links, prices, credits or phone numbers.
+4. Finish remaining visual review/performance/cross-browser checks as relevant to each change.
+   Every implementation task needs its own task doc before code. No commits, staging, push or
+   deployment unless Benito explicitly asks.
+
+- **Handoff:** `docs/09-HANDOFF-NEXT.md` (older state; use this update where it differs).
+- **Backlog:** `docs/10-IDEAS-AND-UX-REVIEW.md` (detailed specs and ordered improvements).

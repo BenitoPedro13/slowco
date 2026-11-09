@@ -19,21 +19,22 @@ export function Hero({
 }: {
   drop: (DropStateInput & { name: string; href: string }) | null;
   /** Campaign photo filling the space above the wordmark, like a poster (design pass). */
-  photo: { src: string; alt: string } | null;
+  photo: { src: string; alt: string; focal: { x: number; y: number } } | null;
 }) {
   return (
     <section className="flex overflow-x-clip min-h-[max(504px,calc(100svh-3.5rem))] flex-col justify-between gap-6 px-4 lg:gap-8 py-4 sm:px-6 lg:min-h-[max(504px,calc(100svh-4rem))] lg:px-10 lg:py-6">
       {drop ? <DropTicker {...drop} /> : <span />}
 
       {photo ? (
-        <div className="relative min-h-[240px] flex-1 lg:min-h-[50svh]">
+        <div className="relative min-h-[240px] flex-1 lg:aspect-[16/9] lg:min-h-0 lg:flex-none">
           <Image
             src={photo.src}
             alt={photo.alt}
             fill
             priority
             sizes="100vw"
-            className="object-cover object-[50%_15%]"
+            className="object-cover"
+            style={{ objectPosition: `${photo.focal.x}% ${photo.focal.y}%` }}
           />
         </div>
       ) : null}

@@ -5,7 +5,7 @@
 export type BagLine = { slug: string; size: string; quantity: number };
 
 export const BAG_STORAGE_KEY = "slow:sacola";
-export const MAX_QUANTITY = 10;
+export const MAX_QUANTITY = 99;
 
 const EMPTY: readonly BagLine[] = Object.freeze([]);
 

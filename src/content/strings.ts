@@ -44,6 +44,14 @@ export const strings = {
   "B-ADICIONADO-1": "{produto}, tamanho {tamanho}, adicionado à sacola. Sacola com 1 item.",
   "B-REMOVIDO": "{produto} removido da sacola.",
   "B-SEM-NUMERO": "Os pedidos pelo site ainda não estão abertos.",
+  "OG-HOME-ALT": "Slow Company: das ruas para o mundo",
+  "OG-ARQUIVO-ALT": "Arquivo de drops da Slow Company",
+  "OG-CONTATO-ALT": "Contato da Slow Company",
+  "OG-SACOLA-ALT": "Sacola da Slow Company",
+  "OG-DROP-ALT": "Drop da Slow Company",
+  "OG-PRODUTO-ALT": "Peça da Slow Company",
+  "OG-DROP": "DROP",
+  "DEV-WHATSAPP": "Desenvolvimento: configure NEXT_PUBLIC_WHATSAPP_NUMBER no .env.local com o número da loja (55 + DDD + número, só dígitos) e reinicie pnpm dev.",
   "B-TAMANHO": "Tamanho {tamanho}",
 
   // 05 §5 Product
@@ -95,6 +103,7 @@ export const strings = {
   "WA-FECHO": "Pode confirmar a disponibilidade?",
 
   // 05 §1 Global, placeholder notice (08 #22)
+  "G-EXEMPLO-CURTO": "DADOS DE EXEMPLO · CATÁLOGO FICTÍCIO",
   "G-EXEMPLO":
     "DADOS DE EXEMPLO: drops, peças, tamanhos e datas deste site são fictícios até o catálogo da Slow Company chegar.",
 

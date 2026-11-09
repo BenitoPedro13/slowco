@@ -37,10 +37,12 @@ export function SiteHeader({
           />
         </nav>
         <div className="ml-auto flex items-center gap-2 sm:gap-4">
-          <ThemeSwitch accent={accent} />
+          <div className="hidden sm:block">
+            <ThemeSwitch accent={accent} />
+          </div>
           <BagCounter />
           <div className="sm:hidden">
-            <MenuSheet items={items} />
+            <MenuSheet items={items} accent={accent} />
           </div>
         </div>
       </div>

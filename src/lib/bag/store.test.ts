@@ -12,7 +12,7 @@ import {
 const a = { slug: "p1", size: "A", quantity: 1 };
 
 describe("bag line operations", () => {
-  it("merges the same product+size and caps at 10", () => {
+  it("merges the same product+size and caps at 99", () => {
     let lines = addLine([], a);
     lines = addLine(lines, { ...a, quantity: 2 });
     lines = addLine(lines, { ...a, size: "B" });
@@ -20,12 +20,12 @@ describe("bag line operations", () => {
       { slug: "p1", size: "A", quantity: 3 },
       { slug: "p1", size: "B", quantity: 1 },
     ]);
-    expect(addLine(lines, { ...a, quantity: 50 })[0].quantity).toBe(10);
+    expect(addLine(lines, { ...a, quantity: 500 })[0].quantity).toBe(99);
     expect(countItems(lines)).toBe(4);
   });
-  it("sets quantity within 1–10 and removes", () => {
+  it("sets quantity within 1–99 and removes", () => {
     expect(setLineQuantity([a], "p1", "A", 0)[0].quantity).toBe(1);
-    expect(setLineQuantity([a], "p1", "A", 12)[0].quantity).toBe(10);
+    expect(setLineQuantity([a], "p1", "A", 120)[0].quantity).toBe(99);
     expect(removeLine([a], "p1", "A")).toEqual([]);
   });
   it("parses storage defensively", () => {

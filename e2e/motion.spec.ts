@@ -27,53 +27,82 @@ test("3. cursor: absent on touch (hover: none)", async ({ browser }) => {
   await ctx.close();
 });
 
-test("4. client navigation runs a view transition and moves focus to the new main", async ({
-  page,
-}) => {
+async function recordPageReveals(page: import("@playwright/test").Page) {
   await page.addInitScript(() => {
-    const w = window as unknown as { __vt: number };
-    w.__vt = 0;
-    const original = document.startViewTransition?.bind(document);
-    if (original) {
-      document.startViewTransition = ((arg: Parameters<typeof original>[0]) => {
-        w.__vt++;
-        return original(arg);
-      }) as typeof document.startViewTransition;
-    }
+    const w = window as unknown as { __reveals: number };
+    w.__reveals = 0;
+    const original = Element.prototype.animate;
+    Element.prototype.animate = function (...args) {
+      if (this.id === "conteudo") w.__reveals++;
+      return original.apply(this, args);
+    };
+  });
+}
+
+for (const reducedMotion of ["no-preference", "reduce"] as const) {
+  test(`4–5. page reveal and focus (${reducedMotion})`, async ({ page }) => {
+    await recordPageReveals(page);
+    await page.emulateMedia({ reducedMotion });
+    await page.goto("/");
+    await expect(page.getByRole("group", { name: "Tema" })).toContainText(/Preto/);
+    await page.getByRole("navigation").getByRole("link", { name: "ARQUIVO", exact: true }).click();
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText("ARQUIVO");
+    await expect(page.locator("main#conteudo")).toBeFocused();
+    expect(await page.evaluate(() => (window as unknown as { __reveals: number }).__reveals))
+      .toBe(reducedMotion === "reduce" ? 0 : 1);
+    await expect.poll(() => page.locator("main#conteudo").evaluate(el => el.getAnimations().length)).toBe(0);
+  });
+}
+
+test("6. navigation survives the browser's hidden-document snapshot rejection", async ({ page }) => {
+  const errors: string[] = [];
+  page.on("pageerror", error => errors.push(error.message));
+  page.on("console", message => { if (message.type() === "error") errors.push(message.text()); });
+  // Deterministic reproduction of Chromium's rejection when a tab hides mid-transition.
+  await page.addInitScript(() => {
+    document.startViewTransition = ((options: ViewTransitionUpdateCallback | StartViewTransitionOptions) => {
+      const update = typeof options === "function" ? options : options.update;
+      const done = Promise.resolve().then(() => update?.());
+      return {
+        ready: Promise.reject(new DOMException("Transition was aborted because of invalid state. Document hidden", "InvalidStateError")),
+        updateCallbackDone: done, finished: done, skipTransition() {}, types: new Set(),
+      };
+    }) as typeof document.startViewTransition;
   });
   await page.goto("/");
   await expect(page.getByRole("group", { name: "Tema" })).toContainText(/Preto/);
-  await page.getByRole("navigation", { name: "Navegação principal" }).getByRole("link", { name: "ARQUIVO" }).click();
+  await page.getByRole("navigation").getByRole("link", { name: "ARQUIVO", exact: true }).click();
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("ARQUIVO");
   await expect(page.locator("main#conteudo")).toBeFocused();
-  expect(await page.evaluate(() => (window as unknown as { __vt: number }).__vt)).toBeGreaterThan(0);
+  await page.waitForTimeout(500);
+  expect(errors).toEqual([]);
 });
 
-test("5. reduced motion: no page-wipe animation", async ({ page }) => {
-  await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto("/");
-  // A rule inside @media (prefers-reduced-motion: reduce) turns the new-page snapshot's animation off.
-  const found = await page.evaluate(() => {
-    const walk = (rules: CSSRuleList, inReduce: boolean): boolean =>
-      [...rules].some((r) => {
-        if (r instanceof CSSMediaRule)
-          return walk(r.cssRules, inReduce || r.conditionText.includes("prefers-reduced-motion: reduce"));
-        if (r instanceof CSSGroupingRule) return walk(r.cssRules, inReduce);
-        return (
-          inReduce &&
-          r instanceof CSSStyleRule &&
-          r.selectorText.includes("::view-transition-new(*)") &&
-          r.style.getPropertyValue("animation-name") === "none" &&
-          r.style.getPropertyPriority("animation-name") === "important"
-        );
-      });
-    return [...document.styleSheets].some((s) => {
-      try {
-        return walk(s.cssRules, false);
-      } catch {
-        return false;
-      }
-    });
+test("7. hidden tabs skip page reveals and hiding a tab cancels a running reveal", async ({ page }) => {
+  await recordPageReveals(page);
+  await page.addInitScript(() => {
+    const original = Element.prototype.animate;
+    Element.prototype.animate = function (...args) {
+      const animation = original.apply(this, args);
+      // Hold the reveal so the visibility event deterministically occurs mid-animation.
+      if (this.id === "conteudo") animation.pause();
+      return animation;
+    };
   });
-  expect(found).toBe(true);
+  await page.goto("/");
+  await expect(page.getByRole("group", { name: "Tema" })).toContainText(/Preto/);
+  await page.evaluate(() => Object.defineProperty(document, "hidden", { configurable: true, value: true }));
+  await page.getByRole("navigation").getByRole("link", { name: "ARQUIVO", exact: true }).click();
+  await expect(page.locator("main#conteudo")).toBeFocused();
+  expect(await page.evaluate(() => (window as unknown as { __reveals: number }).__reveals)).toBe(0);
+  await page.evaluate(() => Object.defineProperty(document, "hidden", { configurable: true, value: false }));
+  await page.getByRole("navigation").getByRole("link", { name: "CONTATO", exact: true }).click();
+  await expect(page.locator("main#conteudo")).toBeFocused();
+  await expect.poll(() => page.locator("main#conteudo").evaluate(el => el.getAnimations().length)).toBe(1);
+  await page.evaluate(() => {
+    Object.defineProperty(document, "hidden", { configurable: true, value: true });
+    document.dispatchEvent(new Event("visibilitychange"));
+  });
+  await expect.poll(() => page.locator("main#conteudo").evaluate(el => el.getAnimations().length)).toBe(0);
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
 });

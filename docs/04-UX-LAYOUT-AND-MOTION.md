@@ -49,10 +49,17 @@ shows indexed URLs worth keeping.
 
 ### 2.1 Header (all routes; T1 ships the hero's own top row only, the shared header comes in T4)
 
-Left: the wordmark (stand-in, `02` §2.3) at `label` size → `/`. Right: theme switch (§3), bag
-counter (§4). Mobile: the same three items; navigation (`DROPS`, `ARQUIVO`, `CONTATO`) moves into
-a menu sheet (Radix Dialog via shadcn `Sheet`, T4). Sticky, height per `02` §5.2;
-`scroll-padding-top` equals its height so focused elements are never hidden under it (2.4.11).
+Desktop: wordmark, navigation, theme swatches and labelled bag counter. Below `sm` (640px):
+`SLOW | SACOLA [00] | MENU`, with 44px bag/menu targets. The full-screen Radix Dialog contains
+navigation and labelled native theme radios (`Preto`, `Branco`, `Cor do drop`); header radios
+are hidden on mobile. Separate radio names prevent the two controls from interfering.
+The dialog traps focus, closes on Escape/FECHAR/navigation, and returns focus to MENU on close.
+The selected theme persists after reload. The custom cursor does not mount on touch.
+Sticky header, height per `02` §5.2; `scroll-padding-top` protects focused content.
+
+The sample-data notice remains on every route while placeholder records exist. Mobile uses
+`G-EXEMPLO-CURTO`, one line at 320px and 12px text; desktop keeps the detailed notice. It cannot
+be dismissed. A1 verification and regression evidence are in `tasks/TASK-A1-mobile-menu.md`.
 
 ### 2.2 Footer
 
@@ -67,25 +74,15 @@ First focusable element on every page: `G-PULAR` → `#conteudo` (the `<main>`).
 
 ### 3.1 Composition (`/`, first viewport)
 
-```
-┌──────────────────────────────────────────────┐
-│ SLOW COMPANY (label)        ○ ○ ●  (switch)  │  top row, gutter padding
-│                                              │
-│                                              │
-│  S L O W                                     │  wordmark stand-in, spans the
-│  (giant, italic, wide, fills content width)  │  content width, bottom-aligned
-│                                              │
-│ SLOW CREATIVE STUDIO AND INDUSTRY APPAREL    │  label, L1
-│ FOR PROFESSIONAL USE ONLY. ALL RIGHTS …      │  label, L2
-│ DAS RUAS PARA O MUNDO            @slow_tm ↗  │  label L5 / Instagram link
-└──────────────────────────────────────────────┘
-```
+The shared header and sample notice precede a current-drop ticker, campaign photo, giant italic
+wordmark and woven-label legal block with the brand line and Instagram link. The photo flexes
+on mobile and uses 16:9 from `lg`. The section has a 504px minimum; on wide desktop screens it
+can extend beyond the first viewport. The full-viewport B1 poster is still backlog work.
 
-- Height `100svh` (min 560px); the wordmark is bottom-aligned above the label rows, so on a phone
-  the labels sit in the thumb zone and the word fills the width.
-- `<h1>`: visible `SLOW` (stand-in, `aria-hidden`) + visually hidden `Slow Company` (`H-H1`).
-- No photo in T1 (consent `08` #9 is open). A photo band comes in T6 when consent exists.
-- No CTA to a drop in T1 (no drop data yet). The Instagram link gives a second keyboard target.
+`HOME_BAND` now selects the already imported white back-print photo `slow-2025-08-21-04.jpg`;
+its editorial focal point is `{x: 50, y: 27}`. The readable print is 2025/SLOW APPAREL COMPANY.
+The `<h1>` contains decorative SLOW letters and the accessible `H-H1` name. This is a type
+stand-in, not a redraw of the client's logo. Photo consent before launch remains `08` #9.
 
 ### 3.2 Entry motion
 
@@ -95,6 +92,12 @@ by the line, which clips below only so the italic overhang is never cut), `--dur
 (reduced motion, no animation support) the letters are simply in place; CSS only, no JS needed.
 Total < 1 s, plays once, never loops.
 Reduced motion: no entry motion, letters in place.
+
+The M1 photo-stack intro runs for approximately 2.2s on the first home visit per session;
+PULAR, Escape or tapping it skips it. It is absent with reduced motion or a stored entry flag.
+Photo sources are deduplicated before selecting five cards. CSS finishes the intro even without
+JavaScript. M2 adds scroll-linked wordmark breakup where supported, with a still fallback.
+Editorial duotone never applies to product photos. Marquee and globe have pause controls.
 
 ### 3.3 The switch
 
@@ -191,11 +194,14 @@ name; it is not selectable (`aria-disabled`, still focusable so it can be read).
 
 ## 7. Page transitions (T9)
 
-Route changes use the View Transitions API where available: the new page wipes in with the same
-geometry as the theme wipe (280ms), else an instant swap. Reduced motion: instant.
-`[VERIFY: Next.js App Router view-transition support at T9 time — next.config experimental
-viewTransition and React <ViewTransition>; https://nextjs.org/docs/app/api-reference/config/next-config-js/viewTransition]`.
-Never blocks input; focus moves to the new page's `<h1>`.
+After a client-side pathname change, focus moves to `main#conteudo`. A 280ms Web Animations
+clip reveal runs on the committed main content; the header stays put. No reveal on initial load,
+in a hidden document, under reduced motion, or without `Element.animate`. Hiding the document,
+enabling reduced motion or navigating again cancels the current reveal and restores full content.
+
+A1 replaces React's document snapshot wrapper because the bundled React DOM reports Chromium's
+hidden-tab cancellation as a recoverable error (react/react#37669). No global error suppression
+or dependency patch. Theme wipes are unchanged. Back/forward-specific polish remains B22.
 
 ## 8. Accessibility decisions (on top of `CLAUDE.md` §6)
 
@@ -205,7 +211,7 @@ Never blocks input; focus moves to the new page's `<h1>`.
 | 1.4.3 / 1.4.11 Contrast | `02` §3.3 matrix, enforced by `pnpm check:contrast`; text on photos only on a solid `--canvas` block, never directly over the image |
 | 1.4.10 Reflow | 320px without horizontal scroll; the wordmark is sized in `cqi`, not `vw`, so it never overflows |
 | 2.1.1 Keyboard | everything reachable; native radios for theme and size; Radix Dialog for the menu sheet |
-| 2.2.2 Pause, stop, hide | countdown has a pause toggle; no carousel autoplays; no marquee in release 1 |
+| 2.2.2 Pause, stop, hide | countdown has a pause toggle; no carousel autoplays; marquee and globe have pause controls |
 | 2.3.1 Three flashes | theme changes throttled to ≥ 600ms; no strobe, no red/green alternation |
 | 2.3.3 Animation from interactions | all non-essential motion off under `prefers-reduced-motion: reduce` |
 | 2.4.7 / 2.4.11 Focus | 2px `--content` ring, 3px offset; sticky header + `scroll-padding-top` |
@@ -221,11 +227,12 @@ cursor native, page transitions instant. Everything stays usable: browse, pick s
 
 A string or fact blocked in `05` is **not rendered**: no "R$ --", no "Em breve" invented for a
 price, no fake sizes. Without `NEXT_PUBLIC_WHATSAPP_NUMBER` the WhatsApp buttons are not
-rendered and the bag shows `B-SEM-NUMERO`.
+rendered; product and filled bag show `B-SEM-NUMERO`. In development only, `DEV-WHATSAPP`
+explains the environment variable and restart. This configuration hint is absent in production.
 
 ## 10. Open items
 
 - Theme default ignores `prefers-color-scheme` (§3.4): Benito to confirm.
-- Header layout on mobile with the switch + counter + menu in 56px: checked in T4 at 320px.
+- Mobile header/menu checked with touch emulation at 320/390px; see A1 verification.
 - Whether `/arquivo` shows sold-out pieces (archive as memory) or only buyable ones: proposal is
   both, sold-out pieces struck through **and** labelled, at full text contrast (`08` #14).

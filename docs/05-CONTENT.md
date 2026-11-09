@@ -41,7 +41,7 @@ areas, payment methods, phone numbers. They come from the client per release (`0
 | G-WORDMARK | `SLOW` | nome | — | stand-in text (`02` §2.3), `aria-hidden` |
 | G-TOPO | `SLOW COMPANY` | nome | — | **retired in T4**: the site header replaces the hero's top row |
 | G-PULAR | `Pular para o conteúdo` | nova | lançamento | skip link |
-| G-TEMA | `Tema` | nova | lançamento | radio group legend (visually hidden) |
+| G-TEMA | `Tema` | nova | lançamento | hidden in desktop header, visible in mobile menu |
 | G-TEMA-PRETO | `Preto` | nova | lançamento | |
 | G-TEMA-BRANCO | `Branco` | nova | lançamento | |
 | G-TEMA-DROP | `Cor do drop` | nova | lançamento | |
@@ -57,6 +57,7 @@ areas, payment methods, phone numbers. They come from the client per release (`0
 | G-FECHAR | `FECHAR` | nova | lançamento | |
 | G-SACOLA | `SACOLA` | nova | lançamento | header, with the counter |
 | G-EXEMPLO | `DADOS DE EXEMPLO: drops, peças, tamanhos e datas deste site são fictícios até o catálogo da Slow Company chegar.` | nova | — (removed with the placeholder catalogue, `08` #22) | top-of-page note, `role="note"`, rendered while any placeholder record exists |
+| G-EXEMPLO-CURTO | `DADOS DE EXEMPLO · CATÁLOGO FICTÍCIO` | nova | — | mobile banner and OG cards while placeholders exist |
 | G-SACOLA-ARIA | `Sacola, {n} itens` / `Sacola, 1 item` / `Sacola vazia` | nova | lançamento | `{n}` is the true count |
 
 ## 2. Home `/` (`H-`)
@@ -202,6 +203,28 @@ client approves the name; decorative textures `alt=""`.
 | M-TITULO | `Slow Company` | nome | — |
 | M-TITULO-MODELO | `%s · Slow Company` | nova | lançamento |
 | M-DESCRICAO | `Slow Company: streetwear de São Gonçalo, RJ. Drops, arquivo e pedidos pelo WhatsApp.` | nova; "São Gonçalo, RJ" from the "SLOW CREATIVE STUDIO / São Gonçalo, RJ" title card in the 2023 Out of Time Reels (`00` §B.6) | lançamento + #4 |
+
+### 10.1 Social preview images and development-only copy
+
+Open Graph cards exist for home, archive, contact, bag and each product/drop. The 404 inherits
+the home card. Each is 1200×630 PNG with the appropriate title/photo, stand-in SLOW wordmark,
+accent edge and `G-EXEMPLO-CURTO` while any placeholder records remain. Text is paper on ink;
+accent colors are decorative. Bag cards never include stored bag contents or the visitor's name.
+
+| ID | String | Source | Gate |
+| --- | --- | --- | --- |
+| OG-HOME-ALT | `Slow Company: das ruas para o mundo` | nova | lançamento |
+| OG-ARQUIVO-ALT | `Arquivo de drops da Slow Company` | nova | lançamento |
+| OG-CONTATO-ALT | `Contato da Slow Company` | nova | lançamento |
+| OG-SACOLA-ALT | `Sacola da Slow Company` | nova | lançamento |
+| OG-DROP-ALT | `Drop da Slow Company` | nova | lançamento |
+| OG-PRODUTO-ALT | `Peça da Slow Company` | nova | lançamento |
+| OG-DROP | `DROP` | nova | lançamento |
+| DEV-WHATSAPP | `Desenvolvimento: configure NEXT_PUBLIC_WHATSAPP_NUMBER no .env.local com o número da loja (55 + DDD + número, só dígitos) e reinicie pnpm dev.` | nova | development only, missing/invalid number |
+
+Hero A3 selection: `slow-2025-08-21-04.jpg` (already in the image manifest), alt:
+`Camiseta branca vista de costas com 2025/SLOW APPAREL COMPANY em azul, modelo segurando uma bola.`
+No new imports; the source remains under §9's consent gate.
 
 ## 11. Approval log
 

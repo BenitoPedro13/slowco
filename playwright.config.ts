@@ -17,6 +17,9 @@ export default defineConfig({
     url: "http://localhost:3100",
     reuseExistingServer: Boolean(process.env.PW_REUSE),
     timeout: 300_000,
-    env: { NEXT_PUBLIC_WHATSAPP_NUMBER: TEST_WHATSAPP_NUMBER },
+    env: {
+      NEXT_PUBLIC_WHATSAPP_NUMBER: TEST_WHATSAPP_NUMBER,
+      NEXT_PUBLIC_SITE_URL: "http://localhost:3100",
+    },
   },
 });

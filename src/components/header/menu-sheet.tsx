@@ -6,13 +6,15 @@
 
 import * as Dialog from "@radix-ui/react-dialog";
 import { strings } from "@/content/strings";
+import { ThemeSwitch } from "@/components/theme/theme-switch";
+import type { DropAccent } from "@/lib/theme/themes";
 import type { NavItem } from "./nav-items";
 import { NavLinks } from "./nav-links";
 
 const button =
   "type-label inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center px-2 underline-offset-4 hover:underline";
 
-export function MenuSheet({ items }: { items: NavItem[] }) {
+export function MenuSheet({ items, accent }: { items: NavItem[]; accent: DropAccent }) {
   return (
     <Dialog.Root>
       <Dialog.Trigger className={button}>{strings["G-MENU"]}</Dialog.Trigger>
@@ -33,6 +35,9 @@ export function MenuSheet({ items }: { items: NavItem[] }) {
               wrapLink={(link) => <Dialog.Close asChild>{link}</Dialog.Close>}
             />
           </nav>
+          <div className="mt-auto border-t border-content py-6">
+            <ThemeSwitch accent={accent} name="tema-menu" labeled />
+          </div>
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>

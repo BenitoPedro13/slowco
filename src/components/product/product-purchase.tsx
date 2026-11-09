@@ -7,6 +7,7 @@
 import { useState } from "react";
 import { fill } from "@/content/fill";
 import { strings } from "@/content/strings";
+import { OrdersUnavailable } from "@/components/whatsapp/orders-unavailable";
 import { useBagActions } from "@/hooks/use-bag";
 import { useNow } from "@/hooks/use-now";
 import { formatDropDate } from "@/lib/format/date";
@@ -151,7 +152,9 @@ export function ProductPurchase({
           <button type="button" className={secondary} onClick={onOrderOne}>
             {strings["P-PEDIR-UMA"]}
           </button>
-        ) : null}
+        ) : (
+          <OrdersUnavailable />
+        )}
       </div>
     </div>
   );

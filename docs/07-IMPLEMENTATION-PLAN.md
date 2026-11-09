@@ -184,3 +184,15 @@ under reduced motion; full suite.
 
 All approvals in `05` §11; every `render` gate resolved or its element absent; full e2e + axe;
 Lighthouse mobile on `/`, a drop and a product (targets set by Benito); `08` #11 for deploy.
+
+## Post-implementation continuation (2026-11-09)
+
+T1–T10 and M1–M6 are implemented as recorded in STATUS; the task definitions above are historical.
+Current work follows `10` §D: A1/A2/A4 verified, A3 photo/crop reviewed, B17 added on the user's
+explicit follow-up. Tasks and actual check outputs live in `tasks/TASK-A1-mobile-menu.md`,
+`tasks/TASK-A3-hero-photo.md`, `tasks/TASK-B17-og-images.md` and STATUS.
+The site currently has a ticker/photo/wordmark hero, woven-label block, second-photo catalog cards,
+split drop section, pausable marquee/globe, skippable photo intro, editorial-only duotone and eased
+cursor. Navigation uses a committed-content reveal after A1's hidden-tab snapshot failure.
+Next: B1 full-viewport poster, B7 product, B6 archive, B8 bag drawer; then remaining §D backlog.
+Client-dependent features remain gated by `08`; a local passing build does not clear launch gates.

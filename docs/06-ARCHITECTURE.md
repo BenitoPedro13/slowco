@@ -152,7 +152,7 @@ export function getCurrentDrop(): Promise<Drop | null>;      // newest drop with
 - **Why not Zustand:** the bag changes on clicks, not every tick; three readers. The global rule
   reserves Zustand for high-frequency state. Why not a server cart: release 1 stores no customer
   data (`CLAUDE.md` §4), and there is no checkout server-side.
-- Cap: quantity 1–10 per line `[confirm with client, 08 #7]`.
+- Cap: quantity 1–99 per line (raised from 10 on 2026-11-09 after Benito hit the old limit) `[confirm with client, 08 #7]`.
 
 ## 5. WhatsApp link (T3)
 
@@ -240,6 +240,8 @@ export function formatOrderMessage(input: {
 | Var | Used by | Required | Notes |
 | --- | --- | --- | --- |
 | `NEXT_PUBLIC_WHATSAPP_NUMBER` | `lib/config.ts` | for ordering | digits with country code, `08` #4; public by nature (it is in every link) |
+| `NEXT_PUBLIC_SITE_URL` | `lib/config.ts`, metadata | for deployed social previews | absolute public origin; domain remains `08` #11; set before build |
+| `VERCEL_PROJECT_PRODUCTION_URL` | `lib/config.ts` | fallback only | HTTPS origin if no explicit site URL; local fallback is `http://localhost:3000` |
 | `SHOPIFY_*` (legacy) | `src/lib/shopify*.ts` | no | removed with T8 |
 
 ## 10. Tests
@@ -285,3 +287,19 @@ Not in scope until `08` #11 (Vercel team, domain). No `vercel` command runs befo
 
 - AlignUI removal (§8) needs Benito's OK.
 - TypeScript 7 and ESLint 10 adoption: revisit after T2.
+
+### 2026-11-09 implementation notes (A1/A3/B17)
+
+- Page navigation reveal now uses `usePageReveal` on committed main content (280ms), replacing
+  the React document snapshot wrapper after hidden-tab InvalidStateError reproduction. No new
+  runtime dependency; cancellation on hidden/reduced-motion/unmount; focus behavior retained.
+- Open Graph images use installed `next/og` ImageResponse and file metadata routes, reading only
+  imported public images. Every page has a card; 404 inherits home, unknown catalogue image
+  routes return 404. Twitter metadata inherits the same images as large summary cards.
+- API verified against installed Next docs and official references:
+  https://nextjs.org/docs/app/api-reference/file-conventions/metadata/opengraph-image and
+  https://nextjs.org/docs/app/api-reference/functions/image-response.
+- Playwright sets the fictional test WhatsApp number and `NEXT_PUBLIC_SITE_URL=http://localhost:3100`
+  **at build time**. A reused production server must match this environment and build. Do not
+  rebuild `.next` underneath `next start`; stop and restart that server to avoid stale chunk 500s.
+- Missing/invalid WhatsApp config shows a shared product/bag state plus a development-only hint.

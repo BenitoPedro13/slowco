@@ -9,6 +9,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { fill } from "@/content/fill";
 import { strings } from "@/content/strings";
+import { OrdersUnavailable } from "@/components/whatsapp/orders-unavailable";
 import { useBagActions, useBagLines } from "@/hooks/use-bag";
 import { MAX_QUANTITY } from "@/lib/bag/store";
 import { formatPrice } from "@/lib/format/price";
@@ -150,7 +151,7 @@ export function BagView({
             <span className="sr-only">{strings["G-NOVA-ABA"]}</span>
           </a>
         ) : (
-          <p className="type-label border border-content p-4">{strings["B-SEM-NUMERO"]}</p>
+          <OrdersUnavailable />
         )}
       </div>
     </div>

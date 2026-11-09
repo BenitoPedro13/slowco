@@ -1,8 +1,7 @@
+import { SITE_URL } from "@/lib/config";
 import type { Metadata } from "next";
 import { Archivo, Geist_Mono } from "next/font/google";
-import { ViewTransition } from "react";
 import "./globals.css";
-import "@/components/transitions/page-transition.css";
 import { RouteFocus } from "@/components/transitions/route-focus";
 import { strings } from "@/content/strings";
 import { themeInitScript } from "@/lib/theme/init-script";
@@ -29,6 +28,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
     default: strings["M-TITULO"],
     template: strings["M-TITULO-MODELO"],
@@ -69,10 +69,11 @@ export default async function RootLayout({
           <SiteHeader accent={accent} currentDropSlug={currentDrop?.slug ?? null} />
           {placeholder ? (
             <p role="note" className="type-label border-b border-content px-4 py-2 sm:px-6 lg:px-10">
-              {strings["G-EXEMPLO"]}
+              <span className="sm:hidden">{strings["G-EXEMPLO-CURTO"]}</span>
+              <span className="hidden sm:inline">{strings["G-EXEMPLO"]}</span>
             </p>
           ) : null}
-          <ViewTransition default="page-wipe">{children}</ViewTransition>
+          {children}
           <SiteFooter />
           <RouteFocus />
           <CustomCursor />

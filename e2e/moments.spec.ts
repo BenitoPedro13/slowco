@@ -74,3 +74,13 @@ test("M6. marquee: pause toggle stops it; still under reduced motion", async ({ 
   await expect(track).toHaveCSS("animation-name", "none");
   await expect(page.getByRole("button", { name: /FAIXA/ })).toBeHidden();
 });
+
+test("M1. loader uses distinct photos when the hero is also a product image", async ({ page }) => {
+  await page.goto("/");
+  const sources = await page.locator(`${loader} img`).evaluateAll(images => images.map(image => {
+    const src = new URL((image as HTMLImageElement).src);
+    return src.searchParams.get("url") ?? src.pathname;
+  }));
+  expect(sources.length).toBeGreaterThan(0);
+  expect(new Set(sources).size).toBe(sources.length);
+});

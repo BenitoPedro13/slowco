@@ -31,6 +31,7 @@ export default async function Home() {
   // Real client photos only (never the drawn stand-ins) for the loader stack.
   const loaderPhotos = [HOME_BAND, ...(await getProducts()).map((p) => p.images[0])]
     .filter((i) => i && i.src.startsWith("/catalogo/slow-") && publicFileExists(i.src))
+    .filter((photo, index, photos) => photos.findIndex((p) => p.src === photo.src) === index)
     .slice(0, 5);
 
   return (

@@ -37,7 +37,7 @@ export function BagCounter() {
       className="type-label inline-flex min-h-11 items-center gap-2 px-1 underline-offset-4 hover:underline aria-[current=page]:underline"
     >
       <span className="sr-only">{bagLabel(count)}</span>
-      <span aria-hidden="true" className="hidden sm:inline">
+      <span aria-hidden="true">
         {strings["G-SACOLA"]}
       </span>
       <span aria-hidden="true" className="inline-flex border border-content px-1">
