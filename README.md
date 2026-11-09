@@ -1,65 +1,53 @@
-# Slow Company Storefront
+# slowco
 
-Next.js + AlignUI storefront preparado para integrar com a Shopify Storefront API. Já inclui páginas bases (home, catálogo, coleções, artistas, contato) com o visual escuro da marca e fallback de produtos para desenvolvimento offline.
+Online store for Slow Company (`@slow_tm`), built by Blessed Moon. Release 1 sells through
+WhatsApp: the bag becomes a pre-filled message to the store's number. No Shopify, no payments,
+no customer data stored.
 
-## Stack
+Read `CLAUDE.md` first; the definition lives in `docs/` (`01` brand → `07` plan, `08` open
+inputs, `STATUS.md`).
 
-- Next.js 15 App Router & React Server Components
-- Tailwind/AlignUI (componentes já prontos dentro de `src/components/ui`)
-- Shopify Storefront GraphQL API (via fetch server-side)
-
-## Como rodar localmente
+## Run it
 
 ```bash
 pnpm install
-cp .env.example .env.local   # ajuste com as credenciais reais da Shopify
-pnpm dev
+pnpm dev            # http://localhost:3000
 ```
 
-> Enquanto as variáveis de ambiente não estiverem configuradas, o site usa produtos de demonstração definidos em `src/data/sample-products.ts`.
+WhatsApp ordering needs the store's number (digits only, with country code, no `+`):
 
-## Configurando a Shopify
-
-1. Crie uma loja Shopify (pode ser trial) e habilite o canal Storefront API.
-2. Em *Settings → Apps and sales channels → Develop apps*, gere uma Storefront Access Token.
-3. Preencha as variáveis no `.env.local`:
-
-```
-SHOPIFY_STORE_DOMAIN=seu-loja.myshopify.com
-SHOPIFY_STOREFRONT_ACCESS_TOKEN=token_gerado
-SHOPIFY_API_VERSION=2024-10
+```bash
+# .env.local (gitignored)
+NEXT_PUBLIC_WHATSAPP_NUMBER=55XXXXXXXXXXX
 ```
 
-4. Crie collections na Shopify com os handles:
-   - `produtos` (catálogo geral)
-   - `apparel`
-   - `merch`
-   - `new-drop`
-5. Publique os produtos nessas collections para que apareçam nas respectivas páginas do site.
+Without it the site works, but the "Pedir no WhatsApp" buttons are not rendered.
 
-> Se preferir outros handles, atualize os arquivos em `src/app/*/page.tsx`.
+Client photos (from the private `references/` folder, list in `scripts/images/instagram-picks.tsv`;
+EXIF/GPS stripped, written to `public/catalogo/`):
 
-## Carrinho & Checkout
+```bash
+pnpm images:import    # needs .venv-ig (Python + Pillow)
+```
 
-- O botão “Adicionar ao carrinho” usa as server actions em `src/app/actions/cart.ts` para criar/atualizar um carrinho via Storefront Cart API.
-- O identificador do carrinho fica em cookie (`slowco_shopify_cart_id`) por 30 dias; o checkout é aberto no link retornado pela Shopify.
-- Sem credenciais Shopify o fluxo entra em modo demonstrativo, persistindo itens via cookie e direcionando o CTA para a página de contato.
-- A página `app/carrinho/page.tsx` mostra linhas, subtotal e botão de checkout; execute novamente `pnpm dev` após configurar as variáveis para ver os dados reais.
+Without them the catalogue shows drawn "FOTO DE EXEMPLO" images.
 
-## Estrutura de pastas principal
+## Checks
 
-- `src/app/` — rotas (home, contato, artistas, coleções)
-- `src/components/layout/` — header, footer e shell global
-- `src/components/sections/` — blocos de seção usados na home
-- `src/components/product/` — cards e grid de produtos
-- `src/lib/shopify.ts` — cliente GraphQL da Shopify
-- `src/lib/shopify-data.ts` — helpers com fallback para dados de exemplo
-- `src/data/sample-products.ts` — produtos mockados
+```bash
+pnpm lint
+pnpm typecheck
+pnpm test             # unit (Vitest)
+pnpm check:contrast   # colour contrast of every theme
+pnpm build
+pnpm test:e2e         # Playwright + axe (builds and serves on :3100)
+pnpm check:launch     # lists what still blocks the public launch
+```
 
-## Próximos passos sugeridos
+## Catalogue
 
-- Permitir seleção real de variações (tamanho/cor) antes de adicionar ao carrinho.
-- Conectar blog/artistas a um CMS (Notion, Sanity ou o Blog da Shopify).
-- Configurar analytics e pixels (Meta, TikTok, GA4) no layout.
-- Integrar recomendações Shopify com base em coleções ou tags específicas e permitir cross-sell no carrinho.
-- Implantar no Vercel ou infraestrutura equivalente (ajusta as envs no painel).
+`src/content/catalog.ts`. Until the client sends real products it holds **placeholder records**
+(`placeholder: true`), which the site labels as example data (`docs/08-OPEN-INPUTS.md` #22).
+
+Stack: Next.js 16, React 19, Tailwind 4, pnpm. Private research material in `references/` is
+gitignored and never imported or served.

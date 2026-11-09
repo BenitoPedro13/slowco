@@ -1,0 +1,95 @@
+/* docs/tasks/TASK-M1-entry-loader.md. Total ≈ 2.2 s: cards 0.15–1.15 s, counter 0–1.6 s,
+   exit wipe 1.7–2.2 s. One upward wipe, no full-screen alternation (WCAG 2.3.1). */
+@property --entrada-n {
+  syntax: "<integer>";
+  inherits: false;
+  initial-value: 0;
+}
+
+.entry-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: var(--ink);
+  color: var(--paper);
+  animation: entrada-sai 0.5s var(--ease-in-out) 1.7s forwards;
+}
+html[data-entrada="vista"] .entry-loader {
+  display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .entry-loader {
+    display: none;
+  }
+}
+
+.entry-loader__stack {
+  position: absolute;
+  width: min(48vw, 320px);
+  aspect-ratio: 3 / 4;
+}
+.entry-loader__card {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  clip-path: inset(100% 0 0 0);
+  rotate: calc((var(--i) - 2) * 3deg);
+  translate: calc((var(--i) - 2) * 14px) calc((var(--i) - 2) * -8px);
+  animation: entrada-carta 0.42s var(--ease-out) forwards;
+  animation-delay: calc(0.15s + var(--i) * 0.2s);
+}
+
+.entry-loader__word {
+  position: relative;
+  font-size: 25.5vw;
+  white-space: nowrap;
+  mix-blend-mode: difference;
+}
+
+.entry-loader__count {
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+  font-variant-numeric: tabular-nums;
+  counter-reset: entrada var(--entrada-n);
+  animation: entrada-conta 1.6s linear forwards;
+}
+.entry-loader__count::after {
+  content: counter(entrada, decimal-leading-zero) "%";
+}
+
+.entry-loader__skip {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px solid var(--paper);
+  color: var(--paper);
+  background: transparent;
+  cursor: pointer;
+}
+.entry-loader__skip:focus-visible {
+  outline: 2px solid var(--paper);
+  outline-offset: 3px;
+}
+
+@keyframes entrada-carta {
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+@keyframes entrada-conta {
+  to {
+    --entrada-n: 100;
+  }
+}
+@keyframes entrada-sai {
+  to {
+    clip-path: inset(0 0 100% 0);
+    visibility: hidden;
+  }
+}

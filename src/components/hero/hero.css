@@ -1,0 +1,63 @@
+/* Hero wordmark entry (docs/04-UX-LAYOUT-AND-MOTION.md §3.2): letters rise from below their
+   line, transform only, once. The clip only cuts below the line; the sides stay open so the
+   italic overhang is never cut. */
+
+.hero-letter-clip {
+  display: inline-block;
+  vertical-align: bottom;
+  clip-path: inset(-0.5em -0.5em -0.04em -0.5em);
+}
+
+.hero-letter {
+  display: inline-block;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero-letter {
+    animation: hero-rise var(--dur-entry) var(--ease-out) both;
+    animation-delay: calc(var(--i, 0) * var(--stagger));
+  }
+}
+
+@keyframes hero-rise {
+  from {
+    transform: translateY(105%);
+  }
+  to {
+    transform: none;
+  }
+}
+
+/* While the entry loader plays (first visit), start the rise after it (TASK-M1). */
+@media (prefers-reduced-motion: no-preference) {
+  html:not([data-entrada="vista"]) .hero-letter {
+    animation-delay: calc(1.9s + var(--i, 0) * var(--stagger));
+  }
+}
+
+/* Scroll moment (docs/tasks/TASK-M2-wordmark-scroll.md): as the wordmark leaves the viewport
+   each letter drifts and turns its own way, and comes back together on the way up.
+   Scroll-linked, CSS only; still wordmark without support or with reduced motion. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-letter-clip {
+      animation: hero-quebra linear both;
+      animation-timeline: view();
+      animation-range: exit -20% exit 100%;
+    }
+  }
+}
+@keyframes hero-quebra {
+  from {
+    clip-path: inset(-0.5em -0.5em -0.04em -0.5em);
+    transform: none;
+  }
+  to {
+    clip-path: inset(-2em -2em -2em -2em);
+    transform: translate(var(--qx, 0), var(--qy, 0)) rotate(var(--qr, 0deg)) scale(var(--qs, 1));
+  }
+}
+.hero-letter-clip:nth-child(1) { --qx: -18%; --qy: -40%; --qr: -14deg; }
+.hero-letter-clip:nth-child(2) { --qx: -6%; --qy: 20%; --qr: 9deg; }
+.hero-letter-clip:nth-child(3) { --qx: 10%; --qy: -25%; --qs: 1.25; --qr: 22deg; }
+.hero-letter-clip:nth-child(4) { --qx: 24%; --qy: 18%; --qr: -18deg; }

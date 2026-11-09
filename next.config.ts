@@ -1,25 +1,6 @@
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
-  images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "cdn.shopify.com",
-      },
-      {
-        protocol: "https",
-        hostname: "dcdn-us.mitiendanube.com",
-      },
-      {
-        protocol: "https",
-        hostname: "cdn.shopifycdn.net",
-      },
-    ],
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-};
+// Images are local files in public/ (docs/06-ARCHITECTURE.md §7): no remote image hosts.
+const nextConfig: NextConfig = {};
 
 export default nextConfig;

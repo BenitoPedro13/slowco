@@ -1,74 +1,50 @@
-import { SiteShell } from "@/components/layout/site-shell";
-import * as Button from "@/components/ui/button";
-import Link from "next/link";
+import type { Metadata } from "next";
+import Image from "next/image";
+import { CONTATO } from "@/content/editorial";
+import { INSTAGRAM_URL, strings } from "@/content/strings";
+import { WHATSAPP_NUMBER } from "@/lib/config";
+import { publicFileExists } from "@/lib/public-file";
+import { buildWhatsAppUrl } from "@/lib/whatsapp/build-url";
 
-export default function ContatoPage() {
+export const metadata: Metadata = { title: "Contato" };
+
+const big =
+  "font-display text-[clamp(40px,7vw,112px)] leading-[0.9] font-extrabold [font-stretch:62%] underline-offset-8 hover:underline";
+const arrow = <span aria-hidden="true" className="type-label ml-3 align-top">↗</span>;
+
+// docs/04 §1.1 (/contato), 05 §7. The VIP group block (C-VIP) waits for 08 #15: not rendered.
+export default function ContactPage() {
+  const photo = publicFileExists(CONTATO.src);
   return (
-    <SiteShell>
-      <section className="mx-auto w-full max-w-3xl px-4 pb-20 pt-16 text-white sm:px-6 lg:px-8">
-        <span className="text-xs font-semibold uppercase tracking-[0.3em] text-white/50">
-          Entre em contato
-        </span>
-        <h1 className="mt-3 text-3xl font-semibold md:text-4xl">
-          Fala com o Slow Studio
+    <main id="conteudo" tabIndex={-1} className="grid gap-12 px-4 py-12 focus:outline-none sm:px-6 lg:grid-cols-12 lg:px-10 lg:py-16">
+      <div className="lg:col-span-7">
+        <h1 className="font-display text-[clamp(56px,12vw,192px)] leading-[0.85] font-extrabold [font-stretch:62%]">
+          {strings["C-TITULO"]}
         </h1>
-        <p className="mt-4 text-sm text-white/65 md:text-base">
-          Tem interesse em personalizar um produto, montar uma collab ou contratar o estúdio para um projeto?
-          Escolhe o canal que preferir e a gente responde rápido.
-        </p>
-
-        <div className="mt-10 space-y-6 rounded-3xl border border-white/10 bg-white/[0.05] p-6">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-white/50">
-              WhatsApp
-            </p>
-            <p className="mt-2 text-lg font-medium text-white">+55 (21) 99999-9999</p>
-            <p className="text-sm text-white/60">Atendimento do estúdio • Segunda a sexta • 10h - 18h</p>
-            <Button.Root
-              asChild
-              variant="primary"
-              mode="filled"
-              size="small"
-              className="mt-4 bg-white text-black hover:bg-white/90"
-            >
-              <Link href="https://wa.me/5521999999999" target="_blank" rel="noreferrer">
-                Mandar mensagem
-              </Link>
-            </Button.Root>
-          </div>
-
-          <div className="border-t border-white/10 pt-6">
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-white/50">
-              E-mail
-            </p>
-            <p className="mt-2 text-lg font-medium text-white">studio@slowcompany.com.br</p>
-            <p className="text-sm text-white/60">Briefings, press, parcerias e atacado.</p>
-          </div>
-
-          <div className="border-t border-white/10 pt-6">
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-white/50">
-              Redes
-            </p>
-            <ul className="mt-2 space-y-2 text-sm text-white/70">
-              <li>
-                <Link href="https://instagram.com/" target="_blank" className="transition hover:text-white">
-                  Instagram @slowcompany
-                </Link>
-              </li>
-              <li>
-                <Link href="https://www.tiktok.com/" target="_blank" className="transition hover:text-white">
-                  TikTok @slowcompany
-                </Link>
-              </li>
-              <li>
-                <Link href="https://open.spotify.com/" target="_blank" className="transition hover:text-white">
-                  Spotify Slow Radio
-                </Link>
-              </li>
-            </ul>
-          </div>
+        <ul className="mt-12 flex flex-col gap-6 border-t border-content pt-10">
+          {WHATSAPP_NUMBER ? (
+            <li>
+              <a href={buildWhatsAppUrl(WHATSAPP_NUMBER)} target="_blank" rel="noopener noreferrer" className={big}>
+                {strings["C-WHATSAPP"]}
+                <span className="sr-only">{strings["G-NOVA-ABA"]}</span>
+              </a>
+              {arrow}
+            </li>
+          ) : null}
+          <li>
+            <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" aria-label={strings["G-INSTAGRAM-ARIA"]} className={big}>
+              {strings["G-INSTAGRAM"]}
+            </a>
+            {arrow}
+          </li>
+        </ul>
+        <p className="type-label mt-16">{strings["C-ORIGEM"]}</p>
+      </div>
+      {photo ? (
+        <div className="duotone relative aspect-[4/5] lg:col-span-5">
+          <Image src={CONTATO.src} alt={CONTATO.alt} fill sizes="(min-width: 1024px) 40vw, 100vw" className="object-cover" />
         </div>
-      </section>
-    </SiteShell>
+      ) : null}
+    </main>
   );
 }

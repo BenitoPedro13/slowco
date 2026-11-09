@@ -1,0 +1,69 @@
+/* docs/04-UX-LAYOUT-AND-MOTION.md §6. Position comes from JS (transform); size from data-mode. */
+html.has-custom-cursor,
+html.has-custom-cursor a,
+html.has-custom-cursor button,
+html.has-custom-cursor label {
+  cursor: none;
+}
+html.has-custom-cursor input:not([type="radio"]):not([type="checkbox"]),
+html.has-custom-cursor textarea {
+  cursor: text;
+}
+
+.custom-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 60;
+  pointer-events: none;
+}
+.custom-cursor[data-visible="false"] {
+  visibility: hidden;
+}
+.custom-cursor__shape {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 12px;
+  height: 12px;
+  translate: -50% -50%;
+  border-radius: 9999px;
+  background: var(--accent);
+  outline: 1px solid var(--content);
+  transition:
+    width var(--dur-ui) var(--ease-out),
+    height var(--dur-ui) var(--ease-out),
+    background-color var(--dur-ui) var(--ease-out);
+}
+.custom-cursor[data-mode="ring"] .custom-cursor__shape {
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  outline: 2px solid var(--accent);
+}
+.custom-cursor[data-mode="ver"] .custom-cursor__shape {
+  width: 72px;
+  height: 72px;
+}
+.custom-cursor__label {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: var(--canvas);
+  opacity: 0;
+}
+.custom-cursor[data-mode="ver"] .custom-cursor__label {
+  opacity: 1;
+}
+
+/* Polish (TASK-M6): squeeze on press; the VER disc is the accent with the canvas colour inside. */
+.custom-cursor[data-press="true"] .custom-cursor__shape {
+  scale: 0.8;
+}
+.custom-cursor__shape {
+  transition-property: width, height, background-color, scale;
+}
+.custom-cursor[data-mode="ver"] .custom-cursor__shape {
+  background: var(--accent);
+  outline-color: var(--canvas);
+}

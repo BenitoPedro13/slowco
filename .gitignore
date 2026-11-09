@@ -39,4 +39,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-pnpm-workspace.yaml
+
+# playwright
+/test-results/
+/playwright-report/
+# Private research: client files, Instagram downloads, site references (saved HTML, videos).
+# Other people's photos and unpublished client material. Never commit, never import, never serve.
+/references/
+.venv-ig/

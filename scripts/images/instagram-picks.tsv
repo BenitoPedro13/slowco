@@ -1,0 +1,20 @@
+# Client photos from @slow_tm chosen for the preview catalogue (docs/05-CONTENT.md §9).
+# Benito, 2026-11-09: the client agreed to their use; they can be swapped later (08 #9).
+# Import (run it yourself; it reads the private references/ folder):
+#   pnpm images:import
+# source	name
+references/instagram/slow_tm/2025-12-30_DS5FXA3je0C/04.jpg	slow-2025-12-30-04
+references/instagram/slow_tm/2025-12-30_DS5FXA3je0C/05.jpg	slow-2025-12-30-05
+references/instagram/slow_tm/2025-12-30_DS5FXA3je0C/08.jpg	slow-2025-12-30-08
+references/instagram/slow_tm/2025-12-30_DS5FXA3je0C/02.jpg	slow-2025-12-30-02
+references/instagram/slow_tm/2025-08-21_DNotZ4GN6Y0/04.jpg	slow-2025-08-21-04
+references/instagram/slow_tm/2025-08-24_DNuP58RWtwg/05.jpg	slow-2025-08-24-05
+references/instagram/slow_tm/2025-08-21_DNotZ4GN6Y0/08.jpg	slow-2025-08-21-08
+references/instagram/slow_tm/2025-08-24_DNuP58RWtwg/06.jpg	slow-2025-08-24-06
+references/instagram/slow_tm/2025-08-24_DNuP58RWtwg/04.jpg	slow-2025-08-24-04
+references/instagram/slow_tm/2025-08-21_DNotZ4GN6Y0/10.jpg	slow-2025-08-21-10
+references/instagram/slow_tm/2025-08-24_DNuP58RWtwg/01.jpg	slow-2025-08-24-01
+references/instagram/slow_tm/2025-08-21_DNotZ4GN6Y0/03.jpg	slow-2025-08-21-03
+references/instagram/slow_tm/2025-08-24_DNuP58RWtwg/09.jpg	slow-2025-08-24-09
+references/instagram/slow_tm/2025-08-24_DNuP58RWtwg/10.jpg	slow-2025-08-24-10
+references/instagram/slow_tm/2025-08-24_DNuP58RWtwg/03.jpg	slow-2025-08-24-03
