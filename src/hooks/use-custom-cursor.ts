@@ -3,13 +3,19 @@
 // The effect syncs with the DOM (pointer events, a class on <html>) and cleans up after itself.
 
 import { useEffect, useRef } from "react";
+import { strings } from "@/content/strings";
 import { useMediaQuery } from "./use-media-query";
 
 const ENABLED_QUERY =
   "(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)";
 const INTERACTIVE = "a, button, label, summary, [role=button]";
 
-export type CursorMode = "dot" | "ring" | "ver";
+/** Labelled modes, set with data-cursor on an element (TASK-B21). */
+const LABELS = { ver: strings["CUR-VER"], pedir: strings["CUR-PEDIR"], arrastar: strings["CUR-ARRASTAR"] } as const;
+type LabelMode = keyof typeof LABELS;
+const isLabelMode = (v: string | undefined): v is LabelMode => v !== undefined && v in LABELS;
+
+export type CursorMode = "dot" | "ring" | LabelMode;
 
 export function useCustomCursor() {
   const enabled = useMediaQuery(ENABLED_QUERY);
@@ -20,6 +26,7 @@ export function useCustomCursor() {
     if (!enabled || !el) return;
     const root = document.documentElement;
     root.classList.add("has-custom-cursor");
+    const label = el.querySelector<HTMLElement>(".custom-cursor__label");
 
     let frame = 0;
     let x = 0;
@@ -45,12 +52,15 @@ export function useCustomCursor() {
       }
       el.dataset.visible = "true";
       const target = e.target instanceof Element ? e.target : null;
-      const mode: CursorMode = target?.closest("[data-cursor=ver]")
-        ? "ver"
-        : target?.closest(INTERACTIVE)
-          ? "ring"
-          : "dot";
-      el.dataset.mode = mode;
+      // The nearest of a labelled element or an interactive one wins: a link inside a rail keeps
+      // the ring, a photo inside a link keeps VER (TASK-B21).
+      const near = target?.closest<HTMLElement>(`[data-cursor], ${INTERACTIVE}`);
+      const wanted = near?.dataset.cursor;
+      const mode: CursorMode = isLabelMode(wanted) ? wanted : near ? "ring" : "dot";
+      if (el.dataset.mode !== mode) {
+        el.dataset.mode = mode;
+        if (label && isLabelMode(mode)) label.textContent = LABELS[mode];
+      }
       if (!frame) frame = requestAnimationFrame(paint);
     };
     const onLeave = () => {

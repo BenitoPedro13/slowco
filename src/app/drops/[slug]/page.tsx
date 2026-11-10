@@ -29,7 +29,7 @@ export default async function DropPage({ params }: { params: Promise<{ slug: str
   const renderedAt = await getRenderTime();
 
   return (
-    <main id="conteudo" tabIndex={-1} className="px-4 py-12 focus:outline-none sm:px-6 lg:px-10 lg:py-16">
+    <main id="conteudo" tabIndex={-1} data-curtain-accent={drop.accent} className="px-4 py-12 focus:outline-none sm:px-6 lg:px-10 lg:py-16">
       <header className="flex flex-col gap-8 pb-12">
         <h1 className="font-display text-[clamp(40px,8vw,120px)] leading-[0.9] font-extrabold [font-stretch:62%]">
           {drop.name}

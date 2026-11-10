@@ -60,8 +60,14 @@ for (const reducedMotion of ["no-preference", "reduce"] as const) {
     }
     await dialog.getByRole("button", { name: "FECHAR" }).focus();
     await page.keyboard.press("Shift+Tab");
+    // Last in the sheet: the Slow Mode switch (TASK-B14), disabled (not focusable) under reduced motion.
+    if (reducedMotion === "no-preference") {
+      await expect(dialog.getByRole("switch", { name: /SLOW MODE/ })).toBeFocused();
+      await page.keyboard.press("Shift+Tab");
+    }
     await expect(dialog.getByRole("radio", { name: "Cor do drop", exact: true })).toBeFocused();
     await page.keyboard.press("Tab");
+    if (reducedMotion === "no-preference") await page.keyboard.press("Tab");
     await expect(dialog.getByRole("button", { name: "FECHAR" })).toBeFocused();
     await page.keyboard.press("Escape");
     await expect(dialog).toBeHidden();

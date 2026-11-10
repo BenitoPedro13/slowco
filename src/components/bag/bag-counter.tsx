@@ -27,11 +27,19 @@ function Digit({ value }: { value: number }) {
   );
 }
 
-export function BagCounter({ whatsappNumber, currentDropHref }: { whatsappNumber: string | null; currentDropHref: string }) {
+export function BagCounter({
+  whatsappNumber,
+  currentDropHref,
+  nextDrop,
+}: {
+  whatsappNumber: string | null;
+  currentDropHref: string;
+  nextDrop: { name: string; releaseAt: string } | null;
+}) {
   const count = useBagCount();
   const shown = Math.min(count, 99);
   return (
-    <BagDrawer count={count} label={bagLabel(count)} whatsappNumber={whatsappNumber} currentDropHref={currentDropHref}>
+    <BagDrawer count={count} label={bagLabel(count)} whatsappNumber={whatsappNumber} currentDropHref={currentDropHref} nextDrop={nextDrop}>
       <span aria-hidden="true">
         {strings["G-SACOLA"]}
       </span>

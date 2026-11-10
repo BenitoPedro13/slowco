@@ -1,0 +1,153 @@
+/* Drop chapters (docs/tasks/TASK-B2-drop-chapters.md). The chapter sets its own tokens to the
+   drop accent (paper text; ink on verde) so everything inside, focus ring included, follows.
+   Flood (D2): ::before is the colour layer; data-flood="pending" (set after hydration, only
+   below the fold, never under reduced motion) clips it away and restores the page tokens;
+   "in" wipes it top to bottom once in 900ms and swaps the tokens at the midpoint. */
+.chapter {
+  --flood: var(--drop);
+  --flood-ink: var(--paper);
+  --canvas: var(--flood);
+  --content: var(--flood-ink);
+  --subtle: var(--flood-ink);
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+  padding-block: 24px 64px;
+  color: var(--content);
+  overflow-x: clip;
+}
+.chapter[data-flood-accent="vermelho"] { --flood: var(--vermelho); }
+.chapter[data-flood-accent="roxo"] { --flood: var(--roxo); }
+.chapter[data-flood-accent="azul"] { --flood: var(--azul); }
+.chapter[data-flood-accent="verde"] { --flood: var(--verde); --flood-ink: var(--ink); }
+/* In the drop theme the page already is the current accent: that chapter floods to ink. */
+[data-theme="drop"][data-drop-accent="vermelho"] .chapter[data-flood-accent="vermelho"],
+[data-theme="drop"][data-drop-accent="roxo"] .chapter[data-flood-accent="roxo"],
+[data-theme="drop"][data-drop-accent="azul"] .chapter[data-flood-accent="azul"],
+[data-theme="drop"][data-drop-accent="verde"] .chapter[data-flood-accent="verde"] {
+  --flood: var(--ink);
+  --flood-ink: var(--paper);
+}
+.chapter::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--flood);
+  clip-path: inset(0);
+}
+.chapter[data-flood="pending"] {
+  --canvas: inherit;
+  --content: inherit;
+  --subtle: inherit;
+}
+.chapter[data-flood="pending"]::before {
+  clip-path: inset(0 0 100% 0);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .chapter {
+    --flood-ms: calc(900ms * var(--motion-scale, 1));
+    transition: --canvas var(--flood-ms) allow-discrete, --content var(--flood-ms) allow-discrete, --subtle var(--flood-ms) allow-discrete;
+  }
+  .chapter::before {
+    transition: clip-path var(--flood-ms) var(--ease-out);
+  }
+}
+
+/* Paper tear (TASK-B22, 09 §5.4.3): a static torn strip in the chapter's colour hangs over the
+   next section. Our own irregular polygon; no motion. */
+.chapter::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: -15px;
+  height: 16px;
+  background: var(--canvas);
+  pointer-events: none;
+  clip-path: polygon(0 0, 100% 0, 100% 55%, 96% 5%, 92% 75%, 88% 45%, 84% 15%, 80% 5%, 76% 95%, 72% 5%, 68% 55%, 64% 45%, 60% 15%, 56% 45%, 52% 35%, 48% 5%, 44% 15%, 40% 20%, 36% 75%, 32% 5%, 28% 35%, 24% 5%, 20% 95%, 16% 20%, 12% 15%, 8% 45%, 4% 15%, 0% 5%);
+}
+
+.chapter__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0 16px 16px;
+}
+.chapter__photo {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  max-height: 72svh;
+  width: 100%;
+}
+.chapter__photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* The bottom 15% is solid chapter colour: the overlapping name always sits on it. */
+  background: linear-gradient(to bottom, transparent 50%, var(--canvas) 85%);
+}
+.chapter__name {
+  position: relative;
+  padding-inline: 16px;
+  font-family: var(--font-archivo), "Arial Narrow", sans-serif;
+  font-weight: 800;
+  font-stretch: 62%;
+  font-size: clamp(64px, 14vw, 224px);
+  line-height: 0.85;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+.chapter__name--over {
+  margin-top: -0.4em;
+}
+.chapter__status {
+  padding: 24px 16px 0;
+}
+.rail {
+  margin-top: 32px;
+}
+.rail__list {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  padding-inline: 16px;
+  scroll-padding-inline: 16px;
+  scrollbar-width: thin;
+}
+/* Mouse drag (TASK-B21): grab cursor where the custom cursor is not shown; no snap or text
+   selection while dragging (snap resumes and settles on a card when released). */
+@media (hover: hover) and (pointer: fine) {
+  .rail__list { cursor: grab; }
+  html.has-custom-cursor .rail__list { cursor: none; }
+}
+.rail__list[data-dragging] {
+  scroll-snap-type: none;
+  user-select: none;
+  cursor: grabbing;
+}
+.rail__list > li {
+  flex: 0 0 min(72vw, 340px);
+  scroll-snap-align: start;
+}
+.rail__controls {
+  display: flex;
+  gap: 8px;
+  padding: 16px 16px 0;
+}
+@media (min-width: 640px) {
+  .chapter__head, .chapter__name, .chapter__status, .rail__controls { padding-inline: 24px; }
+  .rail__list { padding-inline: 24px; scroll-padding-inline: 24px; }
+  .chapter__photo { aspect-ratio: 16 / 9; }
+}
+@media (min-width: 1024px) {
+  .chapter { padding-block: 32px 96px; }
+  /* Keep the name's first line inside the first view of the chapter. */
+  .chapter__photo { max-height: 60svh; }
+  .chapter__head, .chapter__name, .chapter__status, .rail__controls { padding-inline: 40px; }
+  .rail__list { padding-inline: 40px; scroll-padding-inline: 40px; }
+}

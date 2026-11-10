@@ -6,6 +6,7 @@
 
 import * as Dialog from "@radix-ui/react-dialog";
 import { strings } from "@/content/strings";
+import { SlowModeSwitch } from "@/components/motion/slow-mode-switch";
 import { ThemeSwitch } from "@/components/theme/theme-switch";
 import type { DropAccent } from "@/lib/theme/themes";
 import type { NavItem } from "./nav-items";
@@ -37,6 +38,9 @@ export function MenuSheet({ items, accent }: { items: NavItem[]; accent: DropAcc
           </nav>
           <div className="mt-auto border-t border-content py-6">
             <ThemeSwitch accent={accent} name="tema-menu" labeled />
+            <div className="mt-6 border-t border-content pt-4">
+              <SlowModeSwitch />
+            </div>
           </div>
         </Dialog.Content>
       </Dialog.Portal>

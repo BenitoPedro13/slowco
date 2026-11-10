@@ -13,8 +13,9 @@ import { getCatalogIndex, getCurrentDrop, hasPlaceholderData } from "@/lib/catal
 import { CURRENT_DROP_ACCENT, DEFAULT_THEME } from "@/lib/theme/themes";
 
 // docs/02-VISUAL-IDENTITY.md §4.1: Archivo (OFL) with the width axis, normal + italic.
+// Only `latin` is preloaded (pt-BR fits it); latin-ext stays available on demand (TASK-P1).
 const archivo = Archivo({
-  subsets: ["latin", "latin-ext"],
+  subsets: ["latin"],
   axes: ["wdth"],
   style: ["normal", "italic"],
   variable: "--font-archivo",
@@ -22,7 +23,7 @@ const archivo = Archivo({
 });
 
 const geistMono = Geist_Mono({
-  subsets: ["latin", "latin-ext"],
+  subsets: ["latin"],
   variable: "--font-geist-mono",
   display: "swap",
 });
@@ -58,7 +59,7 @@ export default async function RootLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
-      <body className={`antialiased ${placeholder ? "has-sample-notice" : ""}`}>
+      <body id="topo" className={`antialiased ${placeholder ? "has-sample-notice" : ""}`}>
         <a
           href="#conteudo"
           className="type-label sr-only z-40 bg-canvas px-3 py-2 focus:not-sr-only focus:fixed focus:top-2 focus:left-2"
@@ -66,7 +67,7 @@ export default async function RootLayout({
           {strings["G-PULAR"]}
         </a>
         <BagProvider index={index}>
-          <SiteHeader whatsappNumber={WHATSAPP_NUMBER} accent={accent} currentDropSlug={currentDrop?.slug ?? null} />
+          <SiteHeader whatsappNumber={WHATSAPP_NUMBER} accent={accent} currentDrop={currentDrop ? { slug: currentDrop.slug, name: currentDrop.name, releaseAt: currentDrop.releaseAt } : null} />
           {placeholder ? (
             <p role="note" className="type-label flex items-center border-b border-content px-4 py-2 sm:px-6 lg:px-10">
               <span className="xl:hidden">{strings["G-EXEMPLO-CURTO"]}</span>
@@ -74,7 +75,7 @@ export default async function RootLayout({
             </p>
           ) : null}
           {children}
-          <SiteFooter />
+          <SiteFooter placeholder={placeholder} />
           <RouteFocus />
           <CustomCursor />
         </BagProvider>

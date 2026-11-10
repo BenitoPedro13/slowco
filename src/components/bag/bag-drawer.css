@@ -1,4 +1,4 @@
 @media (prefers-reduced-motion: no-preference) {
-  .bag-drawer[data-state="open"] { animation: bag-enter 250ms var(--ease-out) both; }
+  .bag-drawer[data-state="open"] { animation: bag-enter calc(250ms * var(--motion-scale, 1)) var(--ease-out) both; }
 }
 @keyframes bag-enter { from { transform: translateX(100%); } to { transform: none; } }

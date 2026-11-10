@@ -17,6 +17,7 @@ export default async function BagPage() {
       <BagView
         whatsappNumber={WHATSAPP_NUMBER}
         currentDropHref={drop ? `/drops/${drop.slug}` : "/arquivo"}
+        nextDrop={drop ? { name: drop.name, releaseAt: drop.releaseAt } : null}
       />
     </main>
   );

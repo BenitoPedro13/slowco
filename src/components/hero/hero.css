@@ -110,7 +110,7 @@
   .hero-poster__wordmark { inset-inline: 40px; }
 }
 @media (prefers-reduced-motion: no-preference) {
-  .hero-poster__photo { animation: hero-settle 1.2s var(--ease-out) both; }
+  .hero-poster__photo { animation: hero-settle calc(1.2s * var(--motion-scale, 1)) var(--ease-out) both; }
   html:not([data-entrada="vista"]) .hero-poster__photo { animation-delay: 1.9s; }
 }
 @keyframes hero-settle { from { transform: scale(1.08); } to { transform: scale(1); } }

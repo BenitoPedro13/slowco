@@ -20,7 +20,7 @@ const bagLink = (page: Page) => page.getByRole("link", { name: /^Sacola/ });
 test("1. empty bag: counter 00, named 'Sacola vazia', empty state", async ({ page }) => {
   await page.goto("/sacola");
   await expect(bagLink(page)).toHaveAccessibleName("Sacola vazia");
-  await expect(page.getByText("Sua sacola está vazia.")).toBeVisible();
+  await expect(page.getByText("A SACOLA ESTÁ VAZIA.")).toBeVisible();
   await expect(page.getByRole("link", { name: "VER O DROP ATUAL" })).toHaveAttribute(
     "href",
     /^\/drops\//,

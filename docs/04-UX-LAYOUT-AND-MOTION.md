@@ -281,3 +281,72 @@ and anchor fallback. Drawer and full page share BagView and the exact formatOrde
 output shown in the preview and encoded WhatsApp URL. Name/quantity/removal update both.
 Internal links close the drawer; Escape restores trigger focus. Entry is 250ms, instant
 under reduced motion. Missing-number send gates remain. No new dependencies or storage.
+
+## B11 / B15 / B20 — Truthful marquee, woven-label footer, 404, empty bag (2026-11-09)
+
+- **Marquee (B11).** Moving line = `DROP ATUAL <nome> / <estado> [03D 13H 22M 10S] /
+  <n> PEÇAS AINDA DISPONÍVEIS / <brand line>`, from the client clock (1 s; 1 min and no seconds
+  under reduced motion). Count = `isPurchasable` over the whole catalogue (same rule as the
+  archive), never stock. Moving copies `aria-hidden`; the sr-only copy is the brand line only.
+  Two copies, 40 s loop, pause toggle and hover/focus pause unchanged. **Reduced motion:** one
+  wrapped copy at 40–96 px, so the whole line is visible (the still composition is complete).
+- **Footer (B15).** Woven care label: bordered tag, dashed stitched inner edge, eyelet; rows
+  `SLOW COMPANY` / legal lines (`lang="en"`) / contact + Instagram / `ESTE SITE USA DADOS DE
+  EXEMPLO` (placeholder only) / `VOLTAR AO TOPO` (fragment link to `<body id="topo">`, no JS,
+  never smooth). Static.
+- **404 (B20).** `SEM SINAL` (h1) over the greyscale staircase photo, 75% black scrim + static
+  scanlines; paper on ink in every theme (the section sets its own tokens, so the focus ring is
+  paper). Label `404 · PÁGINA NÃO ENCONTRADA`; actions `VER O DROP ATUAL` (if any) and
+  `VOLTAR PARA O INÍCIO`. One 600 ms photo fade, none under reduced motion; nothing flickers.
+- **Empty bag (B20).** `A SACOLA ESTÁ VAZIA.` in the condensed face; `O PRÓXIMO DROP, <nome>,
+  ABRE <data>.` only while the current drop is still to open on the browser clock (not rendered
+  before hydration). Placeholder dates stay covered by the global sample notice.
+
+## B2 — Drop chapters and colour flood (2026-11-09)
+
+Home order: entry → poster hero → **one chapter per drop** (current drop, then each older
+released drop with purchasable pieces) → marquee → "pro mundo" → footer. A chapter is a
+`<section aria-labelledby>` named by the drop: label (`DROP ATUAL` / `AINDA DISPONÍVEL`) +
+`VER O DROP`; cover photo edge to edge (4:5 mobile, 16:9 from 640px, ≤ 72svh / 60svh desktop)
+fading into the chapter colour; the name in the condensed face (64–224px) overlapping only the
+solid part; `DropStatus` for the current drop; a rail of cards.
+
+- **Rail:** native scroll-snap `<ul>` in a named region; `ANTERIOR` / `PRÓXIMA` appear only when
+  measured as overflowing, disable at the ends, scroll one card (instant under reduced motion).
+- **Flood (D2):** chapter tokens = drop accent with paper text (ink on `verde`; in the `drop`
+  theme the chapter matching the page accent floods to ink). Server-rendered flooded. After
+  hydration a chapter below the fold is `data-flood="pending"`; at 60% of the viewport it flips
+  to `in` once (900ms top-to-bottom clip-path wipe, tokens swap at the midpoint) and never
+  resets. Reduced motion or already in view: no wipe. At most one change per chapter per view.
+
+## B14 — Slow Mode (2026-11-09, name and copy provisional)
+
+`<html data-motion="slow">` + `localStorage["slow:modo"]="1"`, applied by the init script before
+paint, followed across tabs. `--motion-scale: 2` doubles every CSS duration token and the literal
+durations (hero settle, marquee, drawer, 404 fade, chapter flood); JS motion (theme wipe, page
+reveal, globe turn) reads the same scale. Marquee and globe start paused (their buttons still
+resume them). Scroll-linked wordmark break and the entry loader are unchanged. Control: native
+checkbox `role="switch"` with visible `LIGADO/DESLIGADO`, in the mobile menu and the footer label.
+OS reduced motion wins: switch on, disabled, `Ligado pelo seu sistema (menos movimento).`
+Marquee no longer pauses on `:focus-within` (it trapped the band paused after `RODAR FAIXA`).
+
+## B21 — Cursor states and rail drag (2026-11-09)
+
+Cursor modes: dot; ring over interactive elements; accent disc with a label for
+`data-cursor="ver"` (product photos), `"pedir"` (`PEDIR SÓ ESTA PEÇA`, `PEDIR NO WHATSAPP`; disc
+floats above-right so the button text stays readable) and `"arrastar"` (chapter rails, 88px).
+The nearest of `[data-cursor]` / interactive element decides. Same gates as before (fine
+hovering pointer, no reduced motion). Chapter rails accept mouse drag-to-scroll (mouse only,
+6px slop, snap off while dragging, the click ending a drag is cancelled, native drag of links
+and images suppressed); `grab` cursor when the custom cursor is not shown.
+
+## B22 — Transitions, and the paper tear (2026-11-09)
+
+- In-app navigation reveals the new `<main>` (280 ms) as before, **except** after browser
+  back/forward (`popstate`), where nothing animates.
+- Navigating to a drop page (`<main data-curtain-accent>`): a full-viewport curtain in that drop's
+  accent sweeps up and off (420 ms; ink in the drop theme when the accent is the page colour)
+  instead of the reveal. At most one curtain per 1000 ms (otherwise the plain reveal); none under
+  reduced motion or in a hidden tab. Focus handling unchanged.
+- Chapters end in a static torn strip (16 px, own polygon) in the chapter's colour hanging over
+  the next section; chapters stack in descending `z-index`, below the header.

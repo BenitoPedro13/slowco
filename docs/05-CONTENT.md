@@ -119,7 +119,8 @@ areas, payment methods, phone numbers. They come from the client per release (`0
 | ID | String | Source | Gate | Notes |
 | --- | --- | --- | --- | --- |
 | B-TITULO | `SACOLA` | nova | lançamento | |
-| B-VAZIA | `Sua sacola está vazia.` | nova | lançamento | |
+| B-VAZIA | `A SACOLA ESTÁ VAZIA.` | nova | lançamento | B20 (was `Sua sacola está vazia.`) |
+| B-PROXIMO | `O PRÓXIMO DROP, {nome}, ABRE {data}.` | nova | lançamento | B20; only while the current drop is still to open on the browser clock; name/date from the catalogue |
 | B-VER-DROP | `VER O DROP ATUAL` | nova | lançamento | from the empty bag |
 | B-QTD | `Quantidade` | nova | lançamento | stepper label |
 | B-MAIS | `Aumentar quantidade` | nova | lançamento | accessible name |
@@ -145,6 +146,7 @@ areas, payment methods, phone numbers. They come from the client per release (`0
 | C-ORIGEM | `De São Gonçalo pro mundo` | L6 | lançamento | |
 | X-TITULO | `PÁGINA NÃO ENCONTRADA` | nova | lançamento | |
 | X-VOLTAR | `VOLTAR PARA O INÍCIO` | nova | lançamento | |
+| X-SEM-SINAL | `SEM SINAL` | nova | lançamento | B20: the 404 heading; X-TITULO stays as the visible `404 · PÁGINA NÃO ENCONTRADA` label |
 
 ## 8. WhatsApp message (`WA-`)
 
@@ -268,3 +270,44 @@ remains blocked by 08 #7/#21; these labels do not supply product facts.
 Available-piece counts count purchasable catalogue products, never stock quantities.
 Placeholder names/dates remain explicitly examples. WhatsApp preview uses the existing
 approved-for-preview template unchanged; client approval remains a launch requirement.
+
+### B11/B15/B20 strings (provisional, 2026-11-09)
+
+| ID | pt-BR text |
+| --- | --- |
+| A-CONTAGEM-1 | 1 peça ainda disponível (singular of A-CONTAGEM; archive and marquee) |
+| R-DADOS-EXEMPLO | ESTE SITE USA DADOS DE EXEMPLO (footer label, only while the catalogue is placeholder) |
+| R-TOPO | VOLTAR AO TOPO |
+| X-SEM-SINAL | SEM SINAL |
+| B-VAZIA | A SACOLA ESTÁ VAZIA. |
+| B-PROXIMO | O PRÓXIMO DROP, {nome}, ABRE {data}. |
+
+The marquee (B11) composes existing strings (H-DROP-ATUAL, D-EM-BREVE / D-DISPONIVEL /
+D-ESGOTADO, A-CONTAGEM, M-FAIXA) with catalogue values; it adds no new copy. Image
+`slow-2025-08-24-03.jpg` (manifest IMG-IG) is reused for the 404 with its earlier alt text.
+
+### B2 strings (provisional, 2026-11-09)
+
+| ID | pt-BR text |
+| --- | --- |
+| H-TRILHO | Peças de {drop} (rail region name) |
+| H-ANTERIOR / H-PROXIMA | ANTERIOR / PRÓXIMA |
+
+Chapter labels reuse H-DROP-ATUAL, H-AINDA and A-VER-DROP. Chapter covers are product photos
+already in the image manifest, with their existing alt text.
+
+### B14 strings (provisional, [DECIDE] docs/10 §E 2)
+
+| ID | pt-BR text |
+| --- | --- |
+| R-SLOW-MODE | SLOW MODE (brand vocabulary from the client's posts) |
+| R-LIGADO / R-DESLIGADO | LIGADO / DESLIGADO |
+| R-SLOW-MODE-DESC | Movimento mais lento; faixa e globo começam pausados. |
+| R-SLOW-MODE-SISTEMA | Ligado pelo seu sistema (menos movimento). |
+
+### B21 strings (provisional, decorative, aria-hidden)
+
+| ID | pt-BR text |
+| --- | --- |
+| CUR-PEDIR | PEDIR |
+| CUR-ARRASTAR | ARRASTAR |

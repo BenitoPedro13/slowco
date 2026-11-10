@@ -1,0 +1,20 @@
+/* Drop curtain (TASK-B22): the destination drop's accent; ink in the drop theme when the
+   accent is already the page colour. Hidden (fully clipped) unless animating. */
+.page-curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  pointer-events: none;
+  clip-path: inset(100% 0 0 0);
+  background: var(--drop);
+}
+.page-curtain[data-accent="vermelho"] { background: var(--vermelho); }
+.page-curtain[data-accent="roxo"] { background: var(--roxo); }
+.page-curtain[data-accent="azul"] { background: var(--azul); }
+.page-curtain[data-accent="verde"] { background: var(--verde); }
+[data-theme="drop"][data-drop-accent="vermelho"] .page-curtain[data-accent="vermelho"],
+[data-theme="drop"][data-drop-accent="roxo"] .page-curtain[data-accent="roxo"],
+[data-theme="drop"][data-drop-accent="azul"] .page-curtain[data-accent="azul"],
+[data-theme="drop"][data-drop-accent="verde"] .page-curtain[data-accent="verde"] {
+  background: var(--ink);
+}

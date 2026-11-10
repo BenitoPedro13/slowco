@@ -11,6 +11,8 @@ import { fill } from "@/content/fill";
 import { strings } from "@/content/strings";
 import { OrdersUnavailable } from "@/components/whatsapp/orders-unavailable";
 import { useBagActions, useBagLines } from "@/hooks/use-bag";
+import { useIsUpcoming } from "@/hooks/use-drop-state";
+import { formatDropDate } from "@/lib/format/date";
 import { MAX_QUANTITY } from "@/lib/bag/store";
 import { formatPrice } from "@/lib/format/price";
 import { buildWhatsAppUrl } from "@/lib/whatsapp/build-url";
@@ -25,9 +27,12 @@ export const primaryAction =
 export function BagView({
   whatsappNumber,
   currentDropHref,
+  nextDrop = null,
   compact = false,
   onNavigate,
 }: {
+  /** The current drop, for the empty state's "next drop" line while it is still to open (B20). */
+  nextDrop?: { name: string; releaseAt: string } | null;
   compact?: boolean;
   onNavigate?: () => void;
   whatsappNumber: string | null;
@@ -36,11 +41,19 @@ export function BagView({
   const lines = useBagLines();
   const { setQuantity, remove } = useBagActions();
   const [name, setName] = useState("");
+  const upcoming = useIsUpcoming(nextDrop?.releaseAt);
 
   if (lines.length === 0) {
     return (
       <div className="mt-10 flex flex-col items-start gap-6">
-        <p className="text-lg">{strings["B-VAZIA"]}</p>
+        <p className={`font-display leading-[0.9] font-extrabold [font-stretch:62%] ${compact ? "text-[clamp(40px,8vw,64px)]" : "text-[clamp(40px,7vw,112px)]"}`}>
+          {strings["B-VAZIA"]}
+        </p>
+        {upcoming && nextDrop ? (
+          <p className="type-label max-w-[48ch]">
+            {fill(strings["B-PROXIMO"], { nome: nextDrop.name, data: formatDropDate(nextDrop.releaseAt).toUpperCase() })}
+          </p>
+        ) : null}
         <Link onClick={onNavigate} href={currentDropHref} className={primaryAction}>
           {strings["B-VER-DROP"]}
         </Link>
@@ -153,6 +166,7 @@ export function BagView({
             href={buildWhatsAppUrl(whatsappNumber, message)}
             target="_blank"
             rel="noopener noreferrer"
+            data-cursor="pedir"
             className={primaryAction}
           >
             {strings["B-ENVIAR"]}

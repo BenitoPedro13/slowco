@@ -39,8 +39,8 @@ test("2. /contato: WhatsApp chat link without a message, Instagram", async ({ pa
 test("3. unknown URL: 404 status, title, link home", async ({ page }) => {
   const res = await page.goto("/isto-nao-existe");
   expect(res?.status()).toBe(404);
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("PÁGINA NÃO ENCONTRADA");
-  await page.getByRole("link", { name: "VOLTAR PARA O INÍCIO" }).click();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("SEM SINAL");
+  await page.locator("main").getByRole("link", { name: "VOLTAR PARA O INÍCIO" }).click();
   await expect(page).toHaveURL(/\/$/);
   expect((await axe(page)).violations).toEqual([]);
 });

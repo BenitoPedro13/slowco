@@ -30,7 +30,8 @@ export const strings = {
 
   // 05 §6 Bag
   "B-TITULO": "SACOLA",
-  "B-VAZIA": "Sua sacola está vazia.",
+  "B-VAZIA": "A SACOLA ESTÁ VAZIA.",
+  "B-PROXIMO": "O PRÓXIMO DROP, {nome}, ABRE {data}.",
   "B-VER-DROP": "VER O DROP ATUAL",
   "B-QTD": "Quantidade",
   "B-MAIS": "Aumentar quantidade",
@@ -80,6 +81,10 @@ export const strings = {
   "H-LINHA": "DAS RUAS PARA O MUNDO",
   "H-DROP-ATUAL": "DROP ATUAL",
   "H-AINDA": "AINDA DISPONÍVEL",
+  // Drop chapters (B2).
+  "H-TRILHO": "Peças de {drop}",
+  "H-ANTERIOR": "ANTERIOR",
+  "H-PROXIMA": "PRÓXIMA",
   "H-SLOW-MODE": "SEJA BEM-VINDO AO SLOW MODE",
 
   // 05 §4 Archive
@@ -93,6 +98,7 @@ export const strings = {
   "C-ORIGEM": "De São Gonçalo pro mundo",
   "X-TITULO": "PÁGINA NÃO ENCONTRADA",
   "X-VOLTAR": "VOLTAR PARA O INÍCIO",
+  "X-SEM-SINAL": "SEM SINAL",
 
   // 05 §8 WhatsApp message (gate: lançamento + 08 #4, #5)
   "WA-ABERTURA": "Olá, Slow Company. Quero fazer um pedido pelo site:",
@@ -115,6 +121,7 @@ export const strings = {
   "A-TODOS": "TODOS",
   "A-FILTRAR": "Filtrar drops",
   "A-CONTAGEM": "{n} peças ainda disponíveis",
+  "A-CONTAGEM-1": "1 peça ainda disponível",
   "A-SEM-RESULTADOS": "Nenhum drop neste filtro.",
 
   // Product editorial layout (B7); catalogue facts remain blocked.
@@ -135,8 +142,21 @@ export const strings = {
   "M-RODAR-FAIXA": "RODAR FAIXA",
   "M-FAIXA": "SEJA BEM-VINDO AO SLOW MODE / DAS RUAS PARA O MUNDO /",
 
+  // Woven-label footer (B15).
+  "R-DADOS-EXEMPLO": "ESTE SITE USA DADOS DE EXEMPLO",
+  "R-TOPO": "VOLTAR AO TOPO",
+
+  // Slow Mode switch (B14), provisional ([DECIDE], docs/10 §E 2).
+  "R-SLOW-MODE": "SLOW MODE",
+  "R-LIGADO": "LIGADO",
+  "R-DESLIGADO": "DESLIGADO",
+  "R-SLOW-MODE-DESC": "Movimento mais lento; faixa e globo começam pausados.",
+  "R-SLOW-MODE-SISTEMA": "Ligado pelo seu sistema (menos movimento).",
+
   // 04 §6 cursor label (decorative, aria-hidden)
   "CUR-VER": "VER",
+  "CUR-PEDIR": "PEDIR",
+  "CUR-ARRASTAR": "ARRASTAR",
 
   // 05 §10 Metadata
   "M-TITULO": "Slow Company",

@@ -18,6 +18,7 @@
   font-size: clamp(48px, 9vw, 144px);
   line-height: 0.95;
   white-space: nowrap;
+  text-transform: uppercase;
   padding-right: 0.3em;
 }
 .marquee__track {
@@ -34,16 +35,30 @@
 }
 @media (prefers-reduced-motion: no-preference) {
   .marquee__track {
-    animation: marquee-roda 28s linear infinite;
+    animation: marquee-roda calc(40s * var(--motion-scale, 1)) linear infinite;
   }
+  /* No :focus-within pause: the only focusable thing inside is the toggle, which would keep the
+     band paused right after "RODAR FAIXA" was pressed (found in TASK-B14). */
   .marquee:hover .marquee__track,
-  .marquee:focus-within .marquee__track,
   .marquee[data-paused="true"] .marquee__track {
     animation-play-state: paused;
   }
 }
 @media (prefers-reduced-motion: reduce) {
   .marquee__toggle {
+    display: none;
+  }
+  /* Still and complete (B11): one copy, wrapped, so the drop line and count are all visible. */
+  .marquee__track {
+    width: auto;
+    padding-inline: 16px;
+  }
+  .marquee__item {
+    white-space: normal;
+    font-size: clamp(40px, 6vw, 96px);
+    line-height: 1.05; /* wrapped lines: accents (Í, Ç) must not touch the line above */
+  }
+  .marquee__item + .marquee__item {
     display: none;
   }
 }

@@ -6,9 +6,10 @@ import { BagView } from "./bag-view";
 import { strings } from "@/content/strings";
 import "./bag-drawer.css";
 
-export function BagDrawer({ children, count, label, whatsappNumber, currentDropHref }: {
+export function BagDrawer({ children, count, label, whatsappNumber, currentDropHref, nextDrop }: {
   children: React.ReactNode; count: number; label: string;
   whatsappNumber: string | null; currentDropHref: string;
+  nextDrop: { name: string; releaseAt: string } | null;
 }) {
   const [open, setOpen] = useState(false);
   return (
@@ -29,7 +30,7 @@ export function BagDrawer({ children, count, label, whatsappNumber, currentDropH
             <Dialog.Title className="font-display text-4xl font-extrabold [font-stretch:62%]">{strings["B-TITULO"]}</Dialog.Title>
             <Dialog.Close className="type-label min-h-11 min-w-11 cursor-pointer underline underline-offset-4">{strings["G-FECHAR"]}</Dialog.Close>
           </div>
-          <BagView compact whatsappNumber={whatsappNumber} currentDropHref={currentDropHref} onNavigate={() => setOpen(false)} />
+          <BagView compact whatsappNumber={whatsappNumber} currentDropHref={currentDropHref} nextDrop={nextDrop} onNavigate={() => setOpen(false)} />
           <Dialog.Close asChild>
             <Link href="/sacola" className="type-label mt-8 inline-flex min-h-11 items-center self-start underline underline-offset-4">{strings["B-VER-SACOLA"]}</Link>
           </Dialog.Close>

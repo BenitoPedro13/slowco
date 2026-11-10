@@ -18,15 +18,16 @@
   --azul: #2a48a0;
   --verde: #2bd65a;
 
-  /* motion (02 §7) */
+  /* motion (02 §7); every duration scales with Slow Mode (TASK-B14) */
+  --motion-scale: 1;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out: cubic-bezier(0.76, 0, 0.24, 1);
-  --dur-hover: 120ms;
-  --dur-ui: 240ms;
-  --dur-wipe: 280ms;
-  --dur-entry: 720ms;
-  --stagger: 60ms;
-  --dur-count: 480ms;
+  --dur-hover: calc(120ms * var(--motion-scale));
+  --dur-ui: calc(240ms * var(--motion-scale));
+  --dur-wipe: calc(280ms * var(--motion-scale));
+  --dur-entry: calc(720ms * var(--motion-scale));
+  --stagger: calc(60ms * var(--motion-scale));
+  --dur-count: calc(480ms * var(--motion-scale));
 
   /* defaults, overridden by the attribute blocks below */
   --drop: var(--vermelho);
@@ -34,6 +35,11 @@
   --content: var(--paper);
   --subtle: var(--smoke);
   --accent: var(--drop);
+}
+
+/* Slow Mode (html data-motion, TASK-B14): everything that moves takes twice as long. */
+[data-motion="slow"] {
+  --motion-scale: 2;
 }
 
 /* current drop accent (html data-drop-accent, 06 §6) */

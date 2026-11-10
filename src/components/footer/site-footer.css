@@ -1,0 +1,41 @@
+/* Woven care label (B15): a tag with a stitched inner edge and a punched eyelet. Static: no
+   motion, so nothing changes under reduced motion. Colours follow the theme tokens. */
+.woven-label {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  max-width: 440px;
+  margin-inline: auto;
+  padding: 32px 24px 12px;
+  border: 1px solid var(--content);
+  outline: 1px dashed var(--content);
+  outline-offset: -7px;
+  background: var(--canvas);
+  color: var(--content);
+  text-align: center;
+}
+.woven-label__eyelet {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  translate: -50% 0;
+  border: 1px solid var(--content);
+  border-radius: 50%;
+}
+.woven-label__row {
+  padding-block: 10px;
+}
+.woven-label__row + .woven-label__row {
+  border-top: 1px solid var(--content);
+}
+.woven-label__brand {
+  font-family: var(--font-archivo), "Arial Narrow", sans-serif;
+  font-weight: 800;
+  font-stretch: 62%;
+  font-size: 28px;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}

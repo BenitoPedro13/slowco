@@ -157,7 +157,7 @@ export function ProductPurchase({
           {strings["P-ADICIONAR"]}
         </button>
         {whatsappNumber ? (
-          <button type="button" className={secondary} onClick={onOrderOne}>
+          <button type="button" data-cursor="pedir" className={secondary} onClick={onOrderOne}>
             {strings["P-PEDIR-UMA"]}
           </button>
         ) : (

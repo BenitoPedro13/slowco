@@ -14,14 +14,14 @@ import { NavLinks } from "./nav-links";
 
 export function SiteHeader({
   accent,
-  currentDropSlug,
+  currentDrop,
   whatsappNumber,
 }: {
   whatsappNumber: string | null;
   accent: DropAccent;
-  currentDropSlug: string | null;
+  currentDrop: { slug: string; name: string; releaseAt: string } | null;
 }) {
-  const items = navItems(currentDropSlug);
+  const items = navItems(currentDrop?.slug ?? null);
   return (
     <header className="sticky top-0 z-30 border-b border-content bg-canvas text-content">
       <div className="flex h-14 items-center gap-3 px-4 sm:gap-6 sm:px-6 lg:h-16 lg:px-10">
@@ -42,7 +42,11 @@ export function SiteHeader({
           <div className="hidden sm:block">
             <ThemeSwitch accent={accent} />
           </div>
-          <BagCounter whatsappNumber={whatsappNumber} currentDropHref={currentDropSlug ? `/drops/${currentDropSlug}` : "/arquivo"} />
+          <BagCounter
+            whatsappNumber={whatsappNumber}
+            currentDropHref={currentDrop ? `/drops/${currentDrop.slug}` : "/arquivo"}
+            nextDrop={currentDrop ? { name: currentDrop.name, releaseAt: currentDrop.releaseAt } : null}
+          />
           <div className="sm:hidden">
             <MenuSheet items={items} accent={accent} />
           </div>

@@ -23,3 +23,11 @@ export const CONTATO = {
   width: 1080,
   height: 1440,
 };
+
+// 404 "SEM SINAL" (B20): shown desaturated and dimmed behind the message.
+export const SEM_SINAL = {
+  src: "/catalogo/slow-2025-08-24-03.jpg",
+  alt: "Três modelos com camisas número 23 e bermudas vermelhas descem uma escada de concreto.",
+  width: 1080,
+  height: 1440,
+};

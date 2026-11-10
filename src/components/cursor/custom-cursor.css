@@ -41,9 +41,14 @@ html.has-custom-cursor textarea {
   background: transparent;
   outline: 2px solid var(--accent);
 }
-.custom-cursor[data-mode="ver"] .custom-cursor__shape {
+.custom-cursor:is([data-mode="ver"], [data-mode="pedir"], [data-mode="arrastar"]) .custom-cursor__shape {
   width: 72px;
   height: 72px;
+}
+/* Longer labels get a slightly larger disc (TASK-B21). */
+.custom-cursor[data-mode="arrastar"] .custom-cursor__shape {
+  width: 88px;
+  height: 88px;
 }
 .custom-cursor__label {
   font-family: var(--font-geist-mono), ui-monospace, monospace;
@@ -52,7 +57,7 @@ html.has-custom-cursor textarea {
   color: var(--canvas);
   opacity: 0;
 }
-.custom-cursor[data-mode="ver"] .custom-cursor__label {
+.custom-cursor:is([data-mode="ver"], [data-mode="pedir"], [data-mode="arrastar"]) .custom-cursor__label {
   opacity: 1;
 }
 
@@ -63,7 +68,13 @@ html.has-custom-cursor textarea {
 .custom-cursor__shape {
   transition-property: width, height, background-color, scale;
 }
-.custom-cursor[data-mode="ver"] .custom-cursor__shape {
+.custom-cursor:is([data-mode="ver"], [data-mode="pedir"], [data-mode="arrastar"]) .custom-cursor__shape {
   background: var(--accent);
   outline-color: var(--canvas);
+}
+
+/* PEDIR sits over buttons: float the disc above-right of the pointer so the button's own
+   label stays readable (TASK-B21). */
+.custom-cursor[data-mode="pedir"] .custom-cursor__shape {
+  translate: 12px calc(-100% - 12px);
 }

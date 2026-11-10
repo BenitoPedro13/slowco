@@ -17,6 +17,7 @@ import {
   WIPE_HALF_MS,
   type Theme,
 } from "@/lib/theme/themes";
+import { motionScale } from "@/lib/motion/motion-store";
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -44,7 +45,8 @@ export function useThemeSwitch() {
         const wipe = wipeRef.current;
         const animate = !prefersReducedMotion() && wipe !== null && typeof wipe.animate === "function";
         // The theme is applied WIPE_HALF_MS after the wipe starts; wait so applies stay apart.
-        const leadIn = animate ? WIPE_HALF_MS : 0;
+        const half = WIPE_HALF_MS * motionScale(); // Slow Mode doubles it (TASK-B14)
+        const leadIn = animate ? half : 0;
         const wait = c.lastAppliedAt + THEME_MIN_INTERVAL_MS - (performance.now() + leadIn);
         if (wait > 0) {
           await sleep(wait);
@@ -59,7 +61,7 @@ export function useThemeSwitch() {
         }
 
         wipe.dataset.theme = target;
-        const timing = { duration: WIPE_HALF_MS, easing: WIPE_EASING, fill: "forwards" as const };
+        const timing = { duration: half, easing: WIPE_EASING, fill: "forwards" as const };
         await wipe.animate([{ clipPath: "inset(100% 0 0 0)" }, { clipPath: "inset(0 0 0 0)" }], timing)
           .finished;
         applyTheme(target);

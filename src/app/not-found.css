@@ -1,0 +1,41 @@
+/* 404 "SEM SINAL" (B20). Paper on ink in every theme. The photo is greyscale and dimmed under
+   an 75% black scrim: paper text on the worst case (white wall) stays above 10:1. Scanlines
+   are a static gradient: nothing flickers (WCAG 2.3.1). One 600ms fade-in of the photo, none
+   under reduced motion. */
+.sem-sinal {
+  --canvas: var(--ink);
+  --content: var(--paper);
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: flex-end;
+  min-height: max(480px, calc(100svh - 57px));
+  overflow: hidden;
+  background: var(--ink);
+  color: var(--paper);
+}
+@media (min-width: 1024px) {
+  .sem-sinal { min-height: max(560px, calc(100svh - 65px)); }
+}
+.sem-sinal__photo {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  filter: grayscale(1) contrast(1.15);
+}
+.sem-sinal__photo img { object-position: 50% 30%; }
+.sem-sinal::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(to bottom, rgb(0 0 0 / 0%) 0 2px, rgb(0 0 0 / 35%) 2px 4px),
+    rgb(0 0 0 / 75%);
+}
+.sem-sinal__content { position: relative; width: 100%; }
+@media (prefers-reduced-motion: no-preference) {
+  .sem-sinal__photo { animation: sem-sinal-sintoniza calc(600ms * var(--motion-scale, 1)) var(--ease-out) both; }
+}
+@keyframes sem-sinal-sintoniza { from { opacity: 0; } to { opacity: 1; } }

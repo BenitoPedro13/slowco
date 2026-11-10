@@ -41,7 +41,7 @@ export function ArchiveWall({ posters, filter }: { posters: ArchivePoster[]; fil
               <div className="flex flex-col gap-4 bg-canvas p-4 text-content sm:p-5">
                 <p className="type-label">{poster.state === "em-breve" ? strings["D-EM-BREVE"] : poster.state === "esgotado" ? strings["D-ESGOTADO"] : strings["A-AINDA"]}</p>
                 <h2 className="font-display text-[clamp(40px,5vw,80px)] leading-[0.9] font-extrabold [font-stretch:62%] group-hover:underline">{poster.name}</h2>
-                {poster.available > 0 ? <p className="type-label border-t border-content pt-3">{fill(strings["A-CONTAGEM"], { n: poster.available })}</p> : null}
+                {poster.available > 0 ? <p className="type-label border-t border-content pt-3">{poster.available === 1 ? strings["A-CONTAGEM-1"] : fill(strings["A-CONTAGEM"], { n: poster.available })}</p> : null}
               </div>
             </Link>
           </li>

@@ -3,7 +3,9 @@
 // Animates only while visible, the tab is shown, motion is allowed and the user has not paused.
 
 import { useEffect, useRef, useState } from "react";
+import { motionScale } from "@/lib/motion/motion-store";
 import { useReducedMotion } from "./use-reduced-motion";
+import { usePausedBySlowMode } from "./use-slow-mode";
 
 const TURN_MS = 40_000;
 const TILT = 0.38;
@@ -65,7 +67,9 @@ function draw(ctx: CanvasRenderingContext2D, size: number, angle: number, line: 
 export function useGlobe() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const reduced = useReducedMotion();
-  const [paused, setPaused] = useState(false);
+  // null until the visitor presses the button: until then Slow Mode decides (TASK-B14).
+  const [override, setOverride] = useState<boolean | null>(null);
+  const paused = usePausedBySlowMode(override);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -95,7 +99,7 @@ export function useGlobe() {
     const tick = (t: number) => {
       frame = 0;
       if (!running() || size <= 0) return;
-      if (last) angle += ((t - last) / TURN_MS) * Math.PI * 2;
+      if (last) angle += ((t - last) / (TURN_MS * motionScale())) * Math.PI * 2;
       last = t;
       const [line, accent] = colors();
       draw(ctx, size, angle, line, accent);
@@ -128,5 +132,5 @@ export function useGlobe() {
     };
   }, [reduced, paused]);
 
-  return { canvasRef, reduced, paused, toggle: () => setPaused((p) => !p) };
+  return { canvasRef, reduced, paused, toggle: () => setOverride(!paused) };
 }

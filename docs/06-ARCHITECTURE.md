@@ -303,3 +303,10 @@ Not in scope until `08` #11 (Vercel team, domain). No `vercel` command runs befo
   **at build time**. A reused production server must match this environment and build. Do not
   rebuild `.next` underneath `next start`; stop and restart that server to avoid stale chunk 500s.
 - Missing/invalid WhatsApp config shows a shared product/bag state plus a development-only hint.
+
+## Addendum 2026-11-09 — first-load weight (TASK-P1)
+
+- `next/font/google`: `subsets: ["latin"]` for Archivo and Geist Mono (preload only what pt-BR
+  needs; `latin-ext` faces remain declared and load on demand). Was 6 preloaded files / 401 KB.
+- `next.config.ts`: `images.formats: ["image/avif", "image/webp"]`.
+- No dependency added. Measured effect in `tasks/TASK-P1-first-load-weight.md`.

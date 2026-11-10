@@ -221,3 +221,111 @@ Final browser closeout: filled drawer fits horizontally at 320/390/1440px, with 
 0–900px in the 900px viewport. Reviewed the 320px viewport capture and scrolled white-theme
 product capture. Owned production server on 3100 stopped; no build was changed underneath it.
 Contrast: all 36 pairs pass. Image metadata: 16 images checked, 0 with metadata.
+
+## 2026-11-09 — B11 / B15 / B20 (new session)
+
+The previous working tree had been committed by Benito (`4f8f3c4`). Implemented, uncommitted,
+in `tasks/TASK-B11-B15-B20-truthful-surfaces.md`:
+- B11 marquee carries the live current-drop line + countdown and the purchasable-piece count
+  (aria-hidden; sr copy brand-only); still and complete under reduced motion.
+- B15 footer as a woven care label with the sample-data line and `VOLTAR AO TOPO`.
+- B20 404 `SEM SINAL` over the greyscale staircase photo with links to the drop and home;
+  empty bag names the next drop and date while it is still to open.
+- Archive count singular fixed (`1 peça ainda disponível`).
+
+Executed validation:
+```text
+pnpm test:e2e --workers=4   104 passed (1.1m)   # fresh production build
+pnpm test                   28 passed
+pnpm typecheck              exit 0
+pnpm lint                   0 errors, 1 pre-existing warning (scripts/instagram/console.js)
+pnpm check:contrast         all 36 pairs pass
+git diff --check            clean
+```
+Chromium only; no new performance sample (no image or script weight change on first load
+beyond the marquee hook). **Still open:** home LCP < 2.5 s (B1) and archive LCP follow-up.
+
+B2 followed in the same session (next section).
+
+## 2026-11-09 — B2 drop chapters + D2 flood
+
+Implemented, uncommitted, in `tasks/TASK-B2-drop-chapters.md`: the home's two card sections are
+replaced by one full-bleed chapter per drop (cover photo, giant name, live status for the current
+drop, scroll-snap rail with arrows) with a one-time colour flood in the drop's accent (D2: once
+per chapter, 900ms, never on a timer; none under reduced motion; server-rendered complete).
+No new dependency (CSS + IntersectionObserver/ResizeObserver from ref callbacks).
+
+```text
+pnpm test:e2e --workers=4   111 passed (40.7s)   # fresh production build
+pnpm test                   28 passed
+pnpm typecheck              exit 0
+pnpm lint                   0 errors, 1 pre-existing warning
+pnpm check:contrast         all 36 pairs pass
+git diff --check            clean
+home throttled (3 runs)     before 2716–2748 ms / 651.65 KiB; after 2708–2720 ms / 653.75 KiB
+```
+Chromium only. **Open:** home LCP still ≈ 2.7 s on this profile (the hero photo; B1 target
+2.5 s); archive LCP follow-up; Firefox/WebKit/real-phone checks of the scroll-driven moments.
+
+Next (`10` §D): optional/no-data items such as B14 Slow Mode toggle, B21 cursor states, B22
+transition polish, 09 §5.4.3 paper-tear edges; data-gated items (B3, B4, B5, B9, B10, B12, B18)
+stay hidden until the client's inputs arrive. No staging, commits, push or deployment.
+
+## 2026-11-09 — B14 Slow Mode
+
+Implemented, uncommitted, in `tasks/TASK-B14-slow-mode.md`: a site-level "Slow Mode" switch
+(mobile menu + footer) that halves the speed of all motion and starts the marquee and globe
+paused; OS reduced motion forces it on. Name/copy provisional (`10` §E question 2). Also fixed a
+pre-existing marquee bug (focus on its own toggle kept it paused after `RODAR FAIXA`).
+
+```text
+pnpm test:e2e --workers=4   117 passed (35.2s)   # fresh production build
+pnpm test                   28 passed
+pnpm typecheck              exit 0
+pnpm lint                   0 errors, 1 pre-existing warning
+pnpm check:contrast         all 36 pairs pass
+git diff --check            clean
+```
+Chromium only. Open items unchanged (home LCP ≈ 2.7 s throttled, archive LCP, cross-browser).
+Next: B21 cursor states, B22 transition polish, paper-tear edges (09 §5.4.3); data-gated items
+stay hidden. No staging, commits, push or deployment.
+
+## 2026-11-09 — B21 cursor states + rail drag
+
+Implemented, uncommitted, in `tasks/TASK-B21-cursor-states.md`: `PEDIR` cursor disc on the two
+WhatsApp order actions, `ARRASTAR` on the chapter rails, which now also scroll by mouse drag
+(click after a drag cancelled). Final fresh build: e2e **120 passed**, unit 28, typecheck 0,
+lint 0 errors (1 pre-existing warning), contrast 36/36, diff check clean. Chromium only.
+Next: B22 transition polish, paper-tear edges (09 §5.4.3), then performance (home LCP ≈ 2.7 s
+throttled, archive LCP). No staging, commits, push or deployment.
+
+## 2026-11-09 — P1 performance, B22 transitions, paper tear
+
+Implemented, uncommitted:
+- `tasks/TASK-P1-first-load-weight.md`: fonts preload only `latin` (401 → 211 KB) and images
+  serve AVIF. Throttled lab LCP: home 2.72 → **1.38–1.40 s**, archive 3.88 → **1.89–1.90 s**,
+  product **1.01–1.08 s**. The B1 < 2.5 s target is met on this profile (lab, Chromium only).
+- `tasks/TASK-B22-transitions-and-tear.md`: no page reveal on back/forward; drop-accent curtain
+  (420 ms, ≤ 1 per second, none under reduced motion) when navigating to a drop; static torn
+  edge at the bottom of each home chapter.
+
+```text
+pnpm test:e2e --workers=4   124 passed (39.9s)   # fresh production build
+pnpm test                   28 passed
+pnpm typecheck              exit 0
+pnpm lint                   0 errors, 1 pre-existing warning
+pnpm check:contrast         all 36 pairs pass
+pnpm check:images           16 images, 0 with metadata
+git diff --check            clean
+```
+
+**Everything in `10` §D that does not need client data is now implemented.** Remaining:
+- Data-gated, hidden until inputs arrive (`08`): B3 event block, B4 scarcity, B5 back prints,
+  B9 VIP, B10 notify, B12 date stamps, B18 credits; B16 search only past ~25 pieces; B19
+  worldwide strip and B23 sound need client confirmation/audio.
+- Decisions for Benito (`10` §E): hero photo, Slow Mode name/copy, which data exists, motion cap;
+  plus the provisional defaults in the decisions log (accent red, default theme, voice).
+- Verification gaps: Firefox/WebKit/real phones (scroll-driven wordmark break, flood
+  `allow-discrete` swap, drag rails), field performance after deploy.
+- Launch blockers unchanged (`pnpm check:launch`): catalogue, WhatsApp number, domain/hosting.
+No staging, commits, push or deployment.
